@@ -184,10 +184,10 @@ Une fois Keycloak configuré et démarré, lancez l'application React :
 
 \`\`\`bash
 # Démarrer le serveur de développement
-npm start
+npm run dev
 
 # OU avec yarn
-yarn start
+yarn dev
 \`\`\`
 
 L'application sera accessible à l'adresse : **http://localhost:5173**
