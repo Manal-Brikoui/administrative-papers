@@ -1,96 +1,45 @@
-const apiUrl = 'http://localhost:5018/api/CitizenService/Category'; // Mise à jour avec l'URL correcte
+import axios from 'axios';
+import keycloak from '../config/keycloak';
 
-// Fonction pour récupérer les headers avec le token JWT
+const apiUrl = 'http://localhost:5018/api/CitizenService/Category';
+
+// --- Récupérer les headers avec le token Keycloak ---
 const getHeaders = () => {
-    const token = localStorage.getItem('access_token'); // Récupérer le token JWT
-    return {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-    };
+  if (!keycloak.authenticated || !keycloak.token) {
+    console.error('Token JWT non trouvé dans Keycloak !');
+    throw new Error('Token JWT non trouvé');
+  }
+  return {
+    'Authorization': `Bearer ${keycloak.token}`,
+    'Content-Type': 'application/json',
+  };
 };
 
-// Récupérer toutes les catégories
-export const getCategories = async () => {
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            headers: getHeaders(),
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch categories');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching categories:', error);
-        throw error;
+// --- Fonction générique pour requêtes Axios ---
+const fetchData = async (url, method, body = null) => {
+  try {
+    const response = await axios({
+      url,
+      method,
+      headers: getHeaders(),
+      data: body,
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error('Erreur API :', error.response.data?.message || error.response.statusText);
+    } else if (error.request) {
+      console.error('Aucune réponse reçue de l\'API');
+    } else {
+      console.error('Erreur Axios :', error.message);
     }
+    throw error;
+  }
 };
 
-// Récupérer une catégorie par son ID
-export const getCategoryById = async (id) => {
-    try {
-        const response = await fetch(`${apiUrl}/${id}`, {
-            method: 'GET',
-            headers: getHeaders(),
-        });
-        if (!response.ok) {
-            throw new Error('Category not found');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching category by ID:', error);
-        throw error;
-    }
-};
-
-// Ajouter une catégorie
-export const addCategory = async (category) => {
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify(category),
-        });
-        if (!response.ok) {
-            throw new Error('Failed to add category');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error adding category:', error);
-        throw error;
-    }
-};
-
-// Mettre à jour une catégorie
-export const updateCategory = async (id, category) => {
-    try {
-        const response = await fetch(`${apiUrl}/${id}`, {
-            method: 'PUT',
-            headers: getHeaders(),
-            body: JSON.stringify(category),
-        });
-        if (!response.ok) {
-            throw new Error('Failed to update category');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error updating category:', error);
-        throw error;
-    }
-};
-
-// Supprimer une catégorie
-export const deleteCategory = async (id) => {
-    try {
-        const response = await fetch(`${apiUrl}/${id}`, {
-            method: 'DELETE',
-            headers: getHeaders(),
-        });
-        if (!response.ok) {
-            throw new Error('Failed to delete category');
-        }
-    } catch (error) {
-        console.error('Error deleting category:', error);
-        throw error;
-    }
-};
+// --- CRUD Categories ---
+export const getCategories = async () => fetchData(apiUrl, 'GET');
+export const getCategoryById = async (id) => fetchData(`${apiUrl}/${id}`, 'GET');
+export const addCategory = async (category) => fetchData(apiUrl, 'POST', category);
+export const updateCategory = async (id, category) => fetchData(`${apiUrl}/${id}`, 'PUT', category);
+export const deleteCategory = async (id) => fetchData(`${apiUrl}/${id}`, 'DELETE');

@@ -6,6 +6,6 @@ const keycloakConfig = {
   clientId: 'admin-papers-web'
 }
 
-const keycloak = new Keycloak(keycloakConfig)
+const keycloak = new Keycloak(keycloakConfig);
 
-export default keycloak
+export default keycloak;

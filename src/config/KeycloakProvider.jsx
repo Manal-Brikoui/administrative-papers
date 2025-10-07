@@ -1,7 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import keycloak from './keycloak';
-
-export const KeycloakContext = createContext();
+import { KeycloakContext } from './keycloakContext';
 
 export const KeycloakProvider = ({ children }) => {
   const [kcInitialized, setKcInitialized] = useState(false);
@@ -12,7 +11,7 @@ export const KeycloakProvider = ({ children }) => {
       onLoad: 'check-sso',
       checkLoginIframe: false,
       enableLogging: true,
-      pkceMethod: 'S256'
+      pkceMethod: 'S256',
     }).then(auth => {
       setAuthenticated(auth);
       setKcInitialized(true);
@@ -22,17 +21,22 @@ export const KeycloakProvider = ({ children }) => {
         localStorage.setItem('refresh_token', keycloak.refreshToken);
       }
 
-      // Rafraîchissement automatique du token
-      setInterval(() => {
+      // Rafraîchissement automatique du token toutes les 60 secondes
+      const interval = setInterval(() => {
         keycloak.updateToken(70)
           .then(refreshed => {
             if (refreshed) {
-              localStorage.setItem('access-token', keycloak.token);
-              localStorage.setItem('refresh-token', keycloak.refreshToken);
+              localStorage.setItem('access_token', keycloak.token);
+              localStorage.setItem('refresh_token', keycloak.refreshToken);
+              console.log('Token rafraîchi');
             }
           })
           .catch(() => console.warn('Erreur lors du rafraîchissement du token'));
       }, 60000);
+
+      // Nettoyage de l'intervalle
+      return () => clearInterval(interval);
+
     }).catch(err => console.error('Keycloak init failed', err));
   }, []);
 

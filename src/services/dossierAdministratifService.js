@@ -1,112 +1,99 @@
-const apiUrl = 'http://localhost:5018/api/DossierAdministratif'; // URL de votre backend API
+import axios from 'axios';
+import keycloak from '../config/keycloak';
 
-// Fonction pour récupérer tous les dossiers d'un utilisateur (citizen/admin)
-export const getDossiers = async () => {
+const apiUrl = 'http://localhost:5018/api/CitizenService/DossierAdministratif';
+
+// --- Rafraîchir le token Keycloak avant chaque requête ---
+const ensureToken = async () => {
+  if (!keycloak.authenticated) throw new Error("Utilisateur non authentifié !");
   try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    // Rafraîchit le token si son expiration est inférieure à 30 secondes
+    await keycloak.updateToken(30);
+  } catch (err) {
+    console.error("❌ Erreur lors du rafraîchissement du token:", err);
+    throw new Error("Échec du rafraîchissement du token");
+  }
+  if (!keycloak.token) throw new Error("Token invalide !");
+};
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch dossiers');
-    }
-    return await response.json();
+// --- Récupérer les headers avec le token ---
+const getHeaders = () => {
+  const token = keycloak.token;
+  const userId = keycloak.tokenParsed?.sub;
+  if (!token) throw new Error("Token JWT non trouvé !");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  };
+
+  if (userId) headers['X-User-Id'] = userId; // utile si ton CurrentUserService lit ce header
+
+  console.log("➡️ Headers envoyés:", headers); // debug
+  return headers;
+};
+
+// --- Fonction générique Axios ---
+const fetchData = async (endpoint = '', method = 'GET', body = null) => {
+  await ensureToken();
+  try {
+    const response = await axios({
+      url: endpoint ? `${apiUrl}/${endpoint}` : apiUrl,
+      method,
+      headers: getHeaders(),
+      data: body,
+    });
+    return response.data ?? [];
   } catch (error) {
-    console.error('Error fetching dossiers:', error);
+    handleApiError(error);
     throw error;
   }
 };
 
-// Fonction pour récupérer un dossier par son ID
-export const getDossierById = async (id) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${id}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Dossier not found');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching dossier by ID:', error);
-    throw error;
+// --- Gestion des erreurs API ---
+const handleApiError = (error) => {
+  if (error.response) {
+    console.error("❌ Erreur API:", 
+      error.response.data?.error || 
+      error.response.data?.message || 
+      error.response.statusText
+    );
+  } else if (error.request) {
+    console.error("❌ Aucune réponse reçue de l'API");
+  } else {
+    console.error("❌ Erreur Axios:", error.message);
   }
 };
 
-// Fonction pour ajouter un dossier administratif
+// === Fonctions CRUD dossiers ===
+
+// Récupérer tous les dossiers
+export const getDossiers = async () => fetchData('', 'GET');
+
+// Récupérer un dossier par Id
+export const getDossierById = async (id) => fetchData(id, 'GET');
+
+// Ajouter un dossier
 export const addDossier = async (dossier) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dossier),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to add dossier');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error adding dossier:', error);
-    throw error;
+  if (!dossier.typeDossierId) {
+    throw new Error("typeDossierId est obligatoire pour créer un dossier.");
   }
+  return fetchData('', 'POST', dossier);
 };
 
-// Fonction pour supprimer un dossier
-export const deleteDossier = async (id) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete dossier');
-    }
-  } catch (error) {
-    console.error('Error deleting dossier:', error);
-    throw error;
-  }
+// Mettre à jour un dossier
+export const updateDossier = async (id, dossier) => {
+  if (!id) throw new Error("Id du dossier est obligatoire pour la mise à jour.");
+  return fetchData(`${id}`, 'PUT', dossier);
 };
 
-// Fonction pour ajouter un document à un dossier
+// Supprimer un dossier
+export const deleteDossier = async (id) => fetchData(id, 'DELETE');
+
+// === Ajouter un document à un dossier ===
 export const addDocumentToDossier = async (dossierId, document) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${dossierId}/documents`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(document),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to add document to dossier');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error adding document to dossier:', error);
-    throw error;
+  if (!document.type || !document.filePath) {
+    throw new Error("type et filePath sont obligatoires pour ajouter un document.");
   }
+  return fetchData(`${dossierId}/documents`, 'POST', document);
 };

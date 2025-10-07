@@ -1,112 +1,87 @@
-const apiUrl = 'http://localhost:5018/api/Document'; // URL de votre backend API
+// src/services/documentService.js
+import axios from "axios";
+import keycloak from "../config/keycloak";
 
-// Fonction pour récupérer les documents de l'utilisateur authentifié ou de l'administrateur
+const apiDocumentUrl = "http://localhost:5018/api/CitizenService/Document";
+
+// === Rafraîchir le token Keycloak avant chaque requête ===
+const ensureToken = async () => {
+  if (!keycloak.authenticated) throw new Error("Utilisateur non authentifié !");
+  try {
+    await keycloak.updateToken(30);
+  } catch (err) {
+    console.error("Erreur lors du rafraîchissement du token:", err);
+    throw new Error("Impossible de rafraîchir le token Keycloak");
+  }
+  if (!keycloak.token) throw new Error("Token JWT invalide !");
+};
+
+// === Récupérer headers avec token Keycloak et userId ===
+const getHeaders = () => ({
+  Authorization: `Bearer ${keycloak.token}`,
+  "X-User-Id": keycloak.tokenParsed?.sub || "",
+  "Content-Type": "application/json",
+});
+
+// ==================== Documents ====================
+
+// --- Lire tous les documents ---
 export const getDocuments = async () => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch documents');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching documents:', error);
-    throw error;
-  }
+  await ensureToken();
+  const res = await axios.get(apiDocumentUrl, { headers: getHeaders() });
+  return res.data;
 };
 
-// Fonction pour récupérer un document par son ID
-export const getDocumentById = async (documentId) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${documentId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Document not found');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching document by ID:', error);
-    throw error;
-  }
+// --- Lire un document par ID ---
+export const getDocumentById = async (id) => {
+  await ensureToken();
+  const res = await axios.get(`${apiDocumentUrl}/${id}`, { headers: getHeaders() });
+  return res.data;
 };
 
-// Fonction pour ajouter un nouveau document
+// --- Ajouter un document ---
 export const addDocument = async (document) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(document),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to add document');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error adding document:', error);
-    throw error;
+  await ensureToken();
+  if (!document.type || !document.dossierAdministratifId) {
+    throw new Error("Type et DossierAdministratifId sont requis.");
   }
+
+  const payload = {
+    Type: document.type,
+    DossierAdministratifId: document.dossierAdministratifId,
+    FilePath: document.filePath || "",
+    IsOnPlatform: document.isOnPlatform || false,
+    ImportLocation: document.importLocation || "",
+    UserId: keycloak.tokenParsed?.sub || "",
+    UploadDate: document.uploadDate || new Date().toISOString(),
+  };
+
+  const res = await axios.post(apiDocumentUrl, payload, { headers: getHeaders() });
+  return res.data;
 };
 
-// Fonction pour mettre à jour un document
-export const updateDocument = async (documentId, document) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${documentId}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(document),
-    });
+// --- Mettre à jour un document ---
+export const updateDocument = async (id, document) => {
+  await ensureToken();
 
-    if (!response.ok) {
-      throw new Error('Failed to update document');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error updating document:', error);
-    throw error;
-  }
+  const payload = {
+    Id: id,
+    Type: document.type,
+    DossierAdministratifId: document.dossierAdministratifId,
+    FilePath: document.filePath || "",
+    IsOnPlatform: document.isOnPlatform || false,
+    ImportLocation: document.importLocation || "",
+    UserId: keycloak.tokenParsed?.sub || "",
+    UploadDate: document.uploadDate || new Date().toISOString(),
+  };
+
+  const res = await axios.put(`${apiDocumentUrl}/${id}`, payload, { headers: getHeaders() });
+  return res.data;
 };
 
-// Fonction pour supprimer un document
-export const deleteDocument = async (documentId) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${documentId}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete document');
-    }
-  } catch (error) {
-    console.error('Error deleting document:', error);
-    throw error;
-  }
+// --- Supprimer un document ---
+export const deleteDocument = async (id) => {
+  await ensureToken();
+  const res = await axios.delete(`${apiDocumentUrl}/${id}`, { headers: getHeaders() });
+  return res.data;
 };

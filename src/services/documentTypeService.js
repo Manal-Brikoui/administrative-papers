@@ -1,112 +1,86 @@
-const apiUrl = 'http://localhost:5018/api/DocumentType'; // URL de votre backend API
+// src/services/documentTypeService.js
+import axios from "axios";
+import keycloak from "../config/keycloak";
 
-// Fonction pour récupérer tous les types de documents
+const apiDocumentTypeUrl = "http://localhost:5018/api/CitizenService/DocumentType";
+
+const ensureToken = async () => {
+  if (!keycloak.authenticated) throw new Error("Utilisateur non authentifié !");
+  try {
+    await keycloak.updateToken(30);
+  } catch (err) {
+    console.error("Erreur lors du rafraîchissement du token:", err);
+    throw new Error("Impossible de rafraîchir le token Keycloak");
+  }
+  if (!keycloak.token) throw new Error("Token JWT invalide !");
+};
+
+const getHeaders = () => ({
+  Authorization: `Bearer ${keycloak.token}`,
+  "X-User-Id": keycloak.tokenParsed?.sub || "",
+  "Content-Type": "application/json",
+});
+
+// ==================== DocumentType ====================
+
 export const getDocumentTypes = async () => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch document types');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching document types:', error);
-    throw error;
-  }
+  await ensureToken();
+  const res = await axios.get(apiDocumentTypeUrl, { headers: getHeaders() });
+  return res.data;
 };
 
-// Fonction pour récupérer un type de document par son ID
 export const getDocumentTypeById = async (id) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${id}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Document type not found');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching document type by ID:', error);
-    throw error;
-  }
+  await ensureToken();
+  const res = await axios.get(`${apiDocumentTypeUrl}/${id}`, { headers: getHeaders() });
+  return res.data;
 };
 
-// Fonction pour ajouter un type de document
-export const addDocumentType = async (documentType) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(documentType),
-    });
+export const addDocumentType = async (docType) => {
+  await ensureToken();
 
-    if (!response.ok) {
-      throw new Error('Failed to add document type');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error adding document type:', error);
-    throw error;
+  if (!docType.name || !docType.categoryId || !docType.typeDossierId) {
+    throw new Error("Name, CategoryId et TypeDossierId sont requis !");
   }
+
+  const payload = {
+    id: docType.id || "00000000-0000-0000-0000-000000000000", // backend génère un nouvel ID
+    name: docType.name.trim(),
+    isImportable: docType.isImportable ?? false,
+    category: docType.category || "",
+    categoryId: docType.categoryId,
+    typeDossierId: docType.typeDossierId,
+  };
+
+  console.log("Payload addDocumentType:", payload);
+
+  const res = await axios.post(apiDocumentTypeUrl, payload, { headers: getHeaders() });
+  return res.data;
 };
 
-// Fonction pour mettre à jour un type de document
-export const updateDocumentType = async (id, documentType) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(documentType),
-    });
+export const updateDocumentType = async (id, docType) => {
+  await ensureToken();
 
-    if (!response.ok) {
-      throw new Error('Failed to update document type');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Error updating document type:', error);
-    throw error;
+  if (!docType.name || !docType.categoryId || !docType.typeDossierId) {
+    throw new Error("Name, CategoryId et TypeDossierId sont requis !");
   }
+
+  const payload = {
+    id: id,
+    name: docType.name.trim(),
+    isImportable: docType.isImportable ?? false,
+    category: docType.category || "",
+    categoryId: docType.categoryId,
+    typeDossierId: docType.typeDossierId,
+  };
+
+  console.log("Payload updateDocumentType:", payload);
+
+  const res = await axios.put(`${apiDocumentTypeUrl}/${id}`, payload, { headers: getHeaders() });
+  return res.data;
 };
 
-// Fonction pour supprimer un type de document
 export const deleteDocumentType = async (id) => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${apiUrl}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete document type');
-    }
-  } catch (error) {
-    console.error('Error deleting document type:', error);
-    throw error;
-  }
+  await ensureToken();
+  const res = await axios.delete(`${apiDocumentTypeUrl}/${id}`, { headers: getHeaders() });
+  return res.data;
 };

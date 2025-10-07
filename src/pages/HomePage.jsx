@@ -1,132 +1,41 @@
-// components/Navbar.js
-import { useKeycloak } from '@react-keycloak/web';
-import { Link, useLocation } from 'react-router-dom';
+import React from "react";
 
-const Navbar = () => {
-  const { keycloak, initialized } = useKeycloak();
-  const location = useLocation();
-
-  const navStyle = {
-    backgroundColor: '#2c3e50',
-    padding: '1rem 2rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+const HomePage = () => {
+  const containerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "calc(100vh - 90px)", // moins la hauteur du Navbar
+    backgroundColor: "#eb6a0eff",
+    padding: "1rem",
   };
 
-  const brandStyle = {
-    color: 'white',
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    textDecoration: 'none'
+  const textStyle = {
+    textAlign: "center",
+    fontSize: "1.5rem",
+    color: "#000000", // texte en noir
+    fontWeight: "500",
+    fontStyle: "italic", // texte en italique
+    padding: "1rem 2rem",
+    maxWidth: "700px",
+    lineHeight: "1.8",
+    letterSpacing: "0.5px",
   };
 
-  const navLinksStyle = {
-    display: 'flex',
-    gap: '1.5rem',
-    alignItems: 'center'
+  const highlightStyle = {
+    fontWeight: "700",      // mettre en gras
+    fontSize: "1.6rem",     // légèrement plus grand
+    color: "#040404ff",       // couleur orange SmartBerkane
   };
-
-  const linkStyle = {
-    color: 'white',
-    textDecoration: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '4px',
-    transition: 'background-color 0.3s'
-  };
-
-  const activeLinkStyle = {
-    ...linkStyle,
-    backgroundColor: '#3498db'
-  };
-
-  const buttonStyle = {
-    backgroundColor: '#e74c3c',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    transition: 'background-color 0.3s'
-  };
-
-  const registerButtonStyle = {
-    ...buttonStyle,
-    backgroundColor: '#27ae60'
-  };
-
-  const userInfoStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',
-    color: 'white'
-  };
-
-  if (!initialized) {
-    return (
-      <nav style={navStyle}>
-        <div style={brandStyle}>Administrative Papers</div>
-      </nav>
-    );
-  }
 
   return (
-    <nav style={navStyle}>
-      <Link to="/" style={brandStyle}>Administrative Papers</Link>
-      
-      <div style={navLinksStyle}>
-        {keycloak.authenticated ? (
-          <>
-            <Link 
-              to="/admin" 
-              style={location.pathname === '/admin' ? activeLinkStyle : linkStyle}
-            >
-              Admin
-            </Link>
-            <Link 
-              to="/citizen" 
-              style={location.pathname === '/citizen' ? activeLinkStyle : linkStyle}
-            >
-              Citizen
-            </Link>
-            <Link 
-              to="/profile" 
-              style={location.pathname === '/profile' ? activeLinkStyle : linkStyle}
-            >
-              Profile
-            </Link>
-            
-            <div style={userInfoStyle}>
-              <span>Bonjour, {keycloak.tokenParsed?.preferred_username || keycloak.tokenParsed?.name}</span>
-              <button 
-                onClick={() => keycloak.logout()} 
-                style={buttonStyle}
-              >
-                Déconnexion
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <button 
-              onClick={() => keycloak.login()} 
-              style={buttonStyle}
-            >
-              Connexion
-            </button>
-            <button 
-              onClick={() => keycloak.register()} 
-              style={registerButtonStyle}
-            >
-              Inscription
-            </button>
-          </>
-        )}
+    <div style={containerStyle}>
+      <div style={textStyle}>
+        "{/* ajouter les guillemets ici */}
+        Bienvenue sur <span style={highlightStyle}>SmartBerkane</span>, la plateforme innovante qui simplifie la gestion de vos documents administratifs, la prise de rendez-vous et le suivi de vos dossiers en toute transparence."
       </div>
-    </nav>
+    </div>
   );
 };
 
-export default Navbar;
+export default HomePage;

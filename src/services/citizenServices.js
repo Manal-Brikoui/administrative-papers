@@ -1,73 +1,68 @@
-const API_URL = 'http://localhost:5018/api/CitizenService/Citizen'; // Base URL pour l'API
+// src/services/citizenServices.js
+import axios from "axios";
+import keycloak from "../config/keycloak";
 
-// === Récupérer les informations du citoyen ===
-export const getCitizenInfo = async (userId, token) => {
-    try {
-        const response = await fetch(`${API_URL}/citizen-info`, {
-            method: 'GET',
-            headers: {
-                'X-User-Id': userId,  // En-tête avec l'ID de l'utilisateur
-                'Authorization': `Bearer ${token}`,  // Le token d'authentification
-                'Content-Type': 'application/json',
-            }
-        });
+const API_URL = "http://localhost:5018/api/CitizenService/Citizen";
 
-        if (!response.ok) {
-            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data;  // Retourne les informations du citoyen
-    } catch (error) {
-        console.error("Error fetching citizen info", error);
-        throw error;  // On lance l'erreur pour pouvoir la gérer ailleurs
-    }
+// --- Rafraîchir le token Keycloak avant chaque requête ---
+const ensureToken = async () => {
+  if (!keycloak.authenticated) throw new Error("Utilisateur non authentifié !");
+  try {
+    await keycloak.updateToken(30); // refresh si <30s
+  } catch (err) {
+    console.error("❌ Erreur lors du refresh du token:", err);
+    throw new Error("Échec du rafraîchissement du token");
+  }
+  if (!keycloak.token) throw new Error("Token invalide !");
 };
 
-// === Récupérer les dossiers du citoyen ===
-export const getCitizenDossiers = async (userId, token) => {
-    try {
-        const response = await fetch(`${API_URL}/dossiers`, {
-            method: 'GET',
-            headers: {
-                'X-User-Id': userId,
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
+// --- Récupérer les headers avec token (X-User-Id optionnel) ---
+const getHeaders = () => {
+  const token = keycloak.token;
+  const userId = keycloak.tokenParsed?.sub;
+  if (!token) throw new Error("Token manquant !");
 
-        if (!response.ok) {
-            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
-        }
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
 
-        const data = await response.json();
-        return data;  // Retourne les dossiers du citoyen
-    } catch (error) {
-        console.error("Error fetching citizen dossiers", error);
-        throw error;
-    }
+  // Ajoute X-User-Id seulement si dispo
+  if (userId) headers["X-User-Id"] = userId;
+
+  // 🔍 Debug (peut être commenté en prod)
+  console.log("➡️ Token envoyé:", token?.substring(0, 20) + "...");
+  console.log("➡️ Roles:", keycloak.tokenParsed?.realm_access?.roles || []);
+  console.log("➡️ Headers:", headers);
+
+  return headers;
 };
 
-// === Récupérer les notifications du citoyen ===
-export const getCitizenNotifications = async (userId, token) => {
-    try {
-        const response = await fetch(`${API_URL}/notifications`, {
-            method: 'GET',
-            headers: {
-                'X-User-Id': userId,
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
+// --- Fonction générique pour les appels API ---
+const fetchData = async (endpoint, method = "GET", body = null) => {
+  await ensureToken();
+  try {
+    const res = await axios({
+      url: `${API_URL}/${endpoint}`,
+      method,
+      headers: getHeaders(),
+      data: body,
+    });
 
-        if (!response.ok) {
-            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data;  // Retourne les notifications
-    } catch (error) {
-        console.error("Error fetching citizen notifications", error);
-        throw error;
-    }
+    // ✅ Toujours retourner un tableau si possible
+    if (Array.isArray(res.data)) return res.data;
+    return res.data ?? [];
+  } catch (err) {
+    console.error(
+      "❌ Erreur API :",
+      err.response?.data || err.response?.statusText || err.message
+    );
+    throw err; // <-- mieux de propager l’erreur pour la gérer dans la page
+  }
 };
+
+// --- Fonctions spécifiques pour le citoyen ---
+export const getCitizenInfo = async () => fetchData("citizen-info", "GET");
+export const getCitizenDossiers = async () => fetchData("dossiers", "GET");
+export const getCitizenNotifications = async () =>
+  fetchData("notifications", "GET");
