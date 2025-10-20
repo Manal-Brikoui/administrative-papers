@@ -91,7 +91,7 @@ namespace CitizenServer.Application.Services
             return true;
         }
 
-        // Marquer un dossier comme complet
+
         public async Task<bool> CompleteDossierAsync(Guid id)
         {
             var entity = await _context.Dossiers.FindAsync(id);
@@ -103,7 +103,7 @@ namespace CitizenServer.Application.Services
             return true;
         }
 
-        // Mapping Entity -> DTO
+       
         private static DossierAdministratifDTO MapToDTO(DossierAdministratif entity)
         {
             return new DossierAdministratifDTO
