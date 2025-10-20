@@ -1,4 +1,4 @@
-// components/Sidebar.jsx
+
 import React from "react";
 import "../pages/admin.css";
 
@@ -13,12 +13,12 @@ const Sidebar = ({ isOpen, toggleSidebar, setActiveSection, notifications, rende
 
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
-      {/* Bouton menu */}
+  
       <button className="menu-btn" onClick={toggleSidebar}>
         <img src={optionsIcon} alt="Menu" />
       </button>
 
-      {/* Contenu menu */}
+ 
       <div className="sidebar-content">
         <div
           className="sidebar-item"
