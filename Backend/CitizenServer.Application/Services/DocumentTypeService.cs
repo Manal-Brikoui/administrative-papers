@@ -88,7 +88,7 @@ namespace CitizenServer.Application.Services
             return true;
         }
 
-        // Mapping Entity -> DTO
+      
         private static DocumentTypeDTO MapToDTO(DocumentType entity)
         {
             return new DocumentTypeDTO
@@ -102,7 +102,7 @@ namespace CitizenServer.Application.Services
             };
         }
 
-        // Mapping DTO -> Entity
+       
         private static DocumentType MapToEntity(DocumentTypeDTO dto)
         {
             return new DocumentType
