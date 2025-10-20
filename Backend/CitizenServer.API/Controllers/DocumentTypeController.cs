@@ -11,7 +11,7 @@ namespace CitizenServer.API.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    [Authorize] // Auth obligatoire
+    [Authorize] 
     public class DocumentTypeController : ControllerBase
     {
         private readonly CitizenServiceDbContext _context;
@@ -23,7 +23,7 @@ namespace CitizenServer.API.Controllers
             _currentUser = currentUser;
         }
 
-        // === Récupérer tous les types de documents (Admin et Citizen) ===
+        // Récupérer tous les types de documents
         [HttpGet]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetDocumentTypes()
@@ -42,7 +42,7 @@ namespace CitizenServer.API.Controllers
             return Ok(documentTypes);
         }
 
-        // === Récupérer un type de document par ID (Admin et Citizen) ===
+        // Récupérer un type de document par ID 
         [HttpGet("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetDocumentTypeById(Guid id)
@@ -64,7 +64,7 @@ namespace CitizenServer.API.Controllers
             return Ok(documentType);
         }
 
-        // === Ajouter un type de document (Admin seulement) ===
+        // Ajouter un type de document
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddDocumentType([FromBody] DocumentType documentType)
@@ -92,7 +92,7 @@ namespace CitizenServer.API.Controllers
             return CreatedAtAction(nameof(GetDocumentTypeById), new { id = documentType.Id }, documentType);
         }
 
-        // === Mettre à jour un type de document (Admin seulement) ===
+        //  Mettre à jour un type de document
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateDocumentType(Guid id, [FromBody] DocumentType updatedDocumentType)
@@ -119,7 +119,7 @@ namespace CitizenServer.API.Controllers
             return NoContent();
         }
 
-        // === Supprimer un type de document (Admin seulement) ===
+        //  Supprimer un type de document
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteDocumentType(Guid id)
