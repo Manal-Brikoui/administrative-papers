@@ -1,4 +1,4 @@
-/* === Sidebar principale === */
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -13,12 +13,12 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Sidebar ouverte */
+
 .sidebar.open {
   width: 220px;
 }
 
-/* Bouton menu */
+
 .menu-btn {
   background: none;
   border: none;
@@ -34,7 +34,7 @@
   object-fit: contain;
 }
 
-/* Contenu sidebar */
+
 .sidebar-content {
   display: flex;
   flex-direction: column;
@@ -42,7 +42,7 @@
   gap: 10px;
 }
 
-/* Items */
+
 .sidebar-item {
   display: flex;
   align-items: center;
@@ -66,7 +66,7 @@
   font-weight: 500;
 }
 
-/* Hover */
+
 .sidebar-item:hover {
   background-color: #ff7b00;
   color: #fff;
@@ -76,7 +76,7 @@
   filter: brightness(0) invert(1);
 }
 
-/* Badge */
+
 .badge {
   position: absolute;
   top: 8px;
@@ -92,7 +92,7 @@
   line-height: 1;
 }
 
-/* === Container principal centré === */
+
 .categories-container {
   display: flex;
   justify-content: center;
@@ -102,19 +102,19 @@
   padding: 20px;
 }
 
-/* === Conteneur horizontal pour Catégories + Dossiers === */
+
 .sections-container-horizontal {
   display: flex;
-  justify-content: center; /* centre horizontal */
+  justify-content: center; 
   align-items: flex-start;
-  gap: 30px; /* espace entre sections */
-  flex-wrap: wrap; /* responsive */
+  gap: 30px;
+  flex-wrap: wrap; 
   width: 100%;
-  max-width: 1750px; /* espace global */
+  max-width: 1750px; 
   margin: 0 auto 30px auto;
 }
 
-/* === Card générique === */
+
 .card {
   background: #fff;
   padding: 20px;
@@ -125,7 +125,7 @@
   max-width: 800x;
 }
 
-/* === Sections spécifiques === */
+
 .categories-section.card {
   background-color: #fff3e0;
   border: 2px solid #ffa500;
@@ -142,7 +142,7 @@
   min-width: 500px;
 }
 
-/* Titres */
+
 .categories-title, .dossiers-title {
   display: flex;
   align-items: center;
@@ -249,7 +249,7 @@
   background-color: #fafafa;
 }
 
-/* Boutons */
+
 .delete-btn {
   background: #ffa500;
   border: none;
@@ -282,7 +282,7 @@
   filter: brightness(1.2) sepia(1) hue-rotate(20deg) saturate(5);
 }
 
-/* Ajout dossier */
+
 .add-btn {
   background: #2ecc71;
   border: none;
@@ -326,7 +326,7 @@
   font-size: 14px;
 }
 
-/* === Responsivité === */
+
 @media (max-width: 992px) {
   .sections-container-horizontal {
     flex-direction: column;
@@ -352,27 +352,27 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 28px;
   font-weight: 600;
-  color: #000000; /* couleur principale */
+  color: #000000; 
   line-height: 1.4;
 }
 
 .dashboard-header h2 span {
   font-weight: 700;
-  color: #e65100; /* accent sur SmartBerkane */
+  color: #e65100;
 }
-/* Conteneur principal */
+
 .documents-container {
   margin-top: 20px;
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: center; /* centre le contenu */
+  align-items: center; 
 }
 
-/* Tableau des documents */
+
 .documents-table {
-  width: 100%; /* réduit la largeur à 80% */
-  max-width: 1200px; /* limite max pour ne pas être trop large */
+  width: 100%; 
+  max-width: 1200px;
   border-collapse: collapse;
   margin-top: 5px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -380,7 +380,7 @@
   overflow: hidden;
 }
 
-/* Le reste du CSS reste inchangé */
+
 .documents-table thead {
   background-color: #ffe0b2;
 }
@@ -441,18 +441,18 @@
 }
 
 .documents-table button:nth-child(2) {
-  background-color: #ff7a00; /* Annuler / Supprimer */
+  background-color: #ff7a00;
   color: #fff;
 }
 
-/* Formulaire ajout document */
+
 .add-document-form {
   margin-top: 15px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-  width: 80%; /* même largeur que le tableau */
+  width: 80%; 
   max-width: 900px;
 }
 
@@ -495,7 +495,7 @@
 .add-document-title {
   display: flex;
   align-items: center;
-  gap: 8px; /* espace entre l'icône et le texte */
+  gap: 8px; 
 }
 
 .file-icon {
@@ -505,14 +505,14 @@
 .documents-title {
   display: flex;
   align-items: center;
-  gap: 8px; /* espace entre l'icône et le texte */
-  font-size: 24px; /* taille du texte */
+  gap: 8px; 
+  font-size: 24px; 
   font-weight: 600;
   color: #333;
 }
 
 .documentation-icon {
-  width: 50px;  /* taille de l'icône réduite */
+  width: 50px;  
   height: 50px;
 }
 .citizen-dashboard {
@@ -635,9 +635,9 @@
 .notification-delete-btn:hover {
   background-color: #e64a19;
 }
-/* === Rendez-vous Panel === */
+
 .panel {
-  background-color: #fff8f0; /* thème orange clair */
+  background-color: #fff8f0; 
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -647,13 +647,13 @@
    margin-right: auto;
 }
 
-/* Titre Mes rendez-vous avec icône */
+
 .panel h3 {
   display: flex;
   align-items: center;
   gap: 10px;
   font-size: 1.3rem;
-  color: #e67e22; /* orange foncé */
+  color: #e67e22;
   margin-bottom: 15px;
 }
 
@@ -662,7 +662,7 @@
   height: 24px;
 }
 
-/* Formulaire rendez-vous */
+
 .form-group {
   display: flex;
   flex-wrap: wrap;
@@ -730,7 +730,6 @@
   color: #333;
 }
 
-/* Réduire le margin top si nécessaire */
 .panel,
 .panel-item,
 .form-group {
