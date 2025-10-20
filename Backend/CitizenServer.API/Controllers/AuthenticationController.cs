@@ -19,7 +19,7 @@ namespace CitizenServer.API.Controllers
             _currentUserService = currentUserService;
         }
 
-        // === Récupérer les informations de l'utilisateur authentifié ===
+        // Récupérer les informations de l'utilisateur authentifié
         [HttpGet("user-info")]
         [Authorize(Roles = "admin,citizen")]
         public IActionResult GetUserInfo()
@@ -92,7 +92,7 @@ namespace CitizenServer.API.Controllers
         }
 
 
-        // === Modifier le mot de passe ===
+        //  Modifier le mot de passe
         [HttpPut("change-password")]
         [Authorize(Roles = "admin,citizen")]
         public IActionResult ChangePassword([FromBody] JsonElement passwordData)
@@ -107,11 +107,11 @@ namespace CitizenServer.API.Controllers
                     return BadRequest(new { error = "Le mot de passe actuel et le nouveau mot de passe sont requis." });
                 }
 
-                // Debugging - affiche les mots de passe pour vérifier qu'ils arrivent correctement
+                // affiche les mots de passe pour vérifier qu'ils arrivent correctement
                 Console.WriteLine($"Ancien mot de passe: {oldPassword}, Nouveau mot de passe: {newPassword}");
 
-                // Logique pour changer le mot de passe (peut-être un appel à Keycloak ou une base de données)
-                // Exemple d'appel au service de mise à jour du mot de passe
+                
+              
 
                 return Ok(new { message = "Mot de passe modifié avec succès" });
             }
@@ -121,14 +121,14 @@ namespace CitizenServer.API.Controllers
             }
         }
 
-        // === Déconnexion ===
+        // Déconnexion
         [HttpPost("logout")]
         [Authorize(Roles = "admin,citizen")]
         public IActionResult Logout()
         {
             try
             {
-                // Déconnexion via Keycloak (via le middleware OpenID Connect)
+                // Déconnexion via Keycloak
                 HttpContext.SignOutAsync();
                 return Ok(new { message = "Déconnexion réussie" });
             }
