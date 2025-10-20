@@ -1,9 +1,9 @@
 import axios from 'axios';
-import keycloak from '../config/keycloak';  // Assurez-vous que le chemin est correct
+import keycloak from '../config/keycloak';  
 
-const API_URL = 'http://localhost:5018/api/CitizenService/Authentication';  // Remplacer par l'URL de ton API
+const API_URL = 'http://localhost:5018/api/CitizenService/Authentication';  
 
-// Fonction pour vérifier si le jeton Keycloak est valide et obtenir les headers
+
 export const getAuthHeaders = () => {
   const token = keycloak.token;
 
@@ -11,7 +11,6 @@ export const getAuthHeaders = () => {
     throw new Error('Jeton d\'authentification manquant');
   }
 
-  // Assurez-vous que le jeton est valide avant de l'envoyer
   if (keycloak.isTokenExpired()) {
     // Optionnel : Rediriger l'utilisateur pour se reconnecter si le jeton est expiré
     keycloak.login();
@@ -23,7 +22,7 @@ export const getAuthHeaders = () => {
   };
 };
 
-// Service pour obtenir les informations de l'utilisateur authentifié
+
 export const getUserInfo = async () => {
   try {
     const response = await axios.get(`${API_URL}/user-info`, {
@@ -42,7 +41,7 @@ export const updateUserProfile = async (updatedProfile) => {
     const response = await axios.put(`${API_URL}/update-profile`, updatedProfile, {
       headers: getAuthHeaders(),
     });
-    return response.data;  // Retourne la réponse de l'API après mise à jour du profil
+    return response.data;  
   } catch (error) {
     console.error('Erreur lors de la mise à jour du profil:', error);
     throw new Error('Impossible de mettre à jour le profil.');
@@ -76,24 +75,23 @@ export const logout = async () => {
   }
 };
 
-// Service pour la connexion (redirige l'utilisateur vers Keycloak)
+// Service pour la connexion 
 export const login = async () => {
   try {
-    keycloak.login();  // Redirige l'utilisateur vers Keycloak
+    keycloak.login();  
   } catch (error) {
     console.error('Erreur lors de la connexion:', error);
     throw new Error('Erreur lors de la tentative de connexion.');
   }
 };
 
-// Service pour récupérer les informations après la redirection de Keycloak
+// Service pour récupérer les informations 
 export const redirectToKeycloak = async () => {
   try {
-    // Vérifie si Keycloak est déjà prêt et si l'utilisateur est authentifié
+   
     if (keycloak.authenticated) {
       return { message: 'Utilisateur déjà authentifié' };
     }
-    // Redirige l'utilisateur vers Keycloak si nécessaire
     keycloak.login();
   } catch (error) {
     console.error('Erreur lors de la récupération des informations de redirection Keycloak:', error);
