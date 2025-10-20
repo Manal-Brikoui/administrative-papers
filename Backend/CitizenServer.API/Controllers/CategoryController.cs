@@ -18,7 +18,7 @@ namespace CitizenService.API.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        // === Récupérer toutes les catégories ===
+        // Récupérer toutes les catégories
         [HttpGet]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetCategories()
@@ -27,7 +27,7 @@ namespace CitizenService.API.Controllers
             return Ok(categories);
         }
 
-        // === Récupérer une catégorie par son ID ===
+        // Récupérer une catégorie par son ID 
         [HttpGet("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetCategoryById(Guid id)
@@ -39,7 +39,7 @@ namespace CitizenService.API.Controllers
             return Ok(category);
         }
 
-        // === Ajouter une catégorie (admin seulement) ===
+        // Ajouter une catégorie
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddCategory([FromBody] Category category)
@@ -52,7 +52,7 @@ namespace CitizenService.API.Controllers
             return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
         }
 
-        // === Mettre à jour une catégorie (admin seulement) ===
+        //Mettre à jour une catégorie
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] Category updatedCategory)
@@ -72,7 +72,7 @@ namespace CitizenService.API.Controllers
             return NoContent();
         }
 
-        // === Supprimer une catégorie (admin seulement) ===
+        // Supprimer une catégorie
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCategory(Guid id)
