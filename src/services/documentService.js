@@ -1,10 +1,10 @@
-// src/services/documentService.js
+
 import axios from "axios";
 import keycloak from "../config/keycloak";
 
 const apiDocumentUrl = "http://localhost:5018/api/CitizenService/Document";
 
-// === Rafraîchir le token Keycloak avant chaque requête ===
+
 const ensureToken = async () => {
   if (!keycloak.authenticated) throw new Error("Utilisateur non authentifié !");
   try {
@@ -16,23 +16,23 @@ const ensureToken = async () => {
   if (!keycloak.token) throw new Error("Token JWT invalide !");
 };
 
-// === Récupérer headers avec token Keycloak et userId ===
+
 const getHeaders = () => ({
   Authorization: `Bearer ${keycloak.token}`,
   "X-User-Id": keycloak.tokenParsed?.sub || "",
   "Content-Type": "application/json",
 });
 
-// ==================== Documents ====================
 
-// --- Lire tous les documents ---
+
+//Lire tous les documents 
 export const getDocuments = async () => {
   await ensureToken();
   const res = await axios.get(apiDocumentUrl, { headers: getHeaders() });
   return res.data;
 };
 
-// --- Lire un document par ID ---
+// Lire un document par ID 
 export const getDocumentById = async (id) => {
   await ensureToken();
   const res = await axios.get(`${apiDocumentUrl}/${id}`, { headers: getHeaders() });
@@ -60,7 +60,7 @@ export const addDocument = async (document) => {
   return res.data;
 };
 
-// --- Mettre à jour un document ---
+// Mettre à jour un document
 export const updateDocument = async (id, document) => {
   await ensureToken();
 
@@ -79,7 +79,7 @@ export const updateDocument = async (id, document) => {
   return res.data;
 };
 
-// --- Supprimer un document ---
+// Supprimer un document
 export const deleteDocument = async (id) => {
   await ensureToken();
   const res = await axios.delete(`${apiDocumentUrl}/${id}`, { headers: getHeaders() });
