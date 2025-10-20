@@ -1,10 +1,9 @@
-// src/services/notificationService.js
+
 import axios from 'axios';
 import keycloak from '../config/keycloak';
 
-const apiUrl = 'http://localhost:5018/api/CitizenService/Notification'; // 🔑 adapter à ton controller backend
+const apiUrl = 'http://localhost:5018/api/CitizenService/Notification'; 
 
-// --- Rafraîchir le token Keycloak avant chaque requête ---
 const ensureToken = async () => {
     if (!keycloak.authenticated) {
         throw new Error("Utilisateur non authentifié !");
@@ -18,7 +17,7 @@ const ensureToken = async () => {
     if (!keycloak.token) throw new Error("Token JWT invalide !");
 };
 
-// --- Récupérer headers avec token Keycloak et userId ---
+
 const getHeaders = () => {
     const token = keycloak.token;
     const userId = keycloak.tokenParsed?.sub;
@@ -31,7 +30,7 @@ const getHeaders = () => {
     };
 };
 
-// --- Fonction générique Axios ---
+
 const fetchData = async (endpoint = '', method = 'GET', body = null) => {
     await ensureToken();
     try {
@@ -54,7 +53,7 @@ const fetchData = async (endpoint = '', method = 'GET', body = null) => {
     }
 };
 
-// --- Fonctions CRUD pour Notification ---
+
 export const getNotifications = async () => fetchData('', 'GET');
 export const getNotificationById = async (id) => fetchData(id, 'GET');
 export const addNotification = async (notification) => fetchData('', 'POST', notification);
