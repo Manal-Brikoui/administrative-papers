@@ -12,10 +12,10 @@ namespace CitizenServer.Domain.Entities
         [Key]
         public Guid Id { get; set; }  // Identifiant unique du type de dossier
 
-        [Required]  // Marquer le champ Name comme obligatoire
+        [Required] 
         public string Name { get; set; }
 
-        public string? Description { get; set; }  // Description est facultatif (nullable)
+        public string? Description { get; set; }  
 
         // Liste des dossiers associés à ce type de dossier
         public ICollection<DossierAdministratif> Dossiers { get; set; }
@@ -24,9 +24,9 @@ namespace CitizenServer.Domain.Entities
         public ICollection<Rendezvous> Rendezvous { get; set; }
 
         // Liste des types de documents associés à ce type de dossier
-        public ICollection<DocumentType> DocumentTypes { get; set; }  // <-- Ajoute cette ligne
+        public ICollection<DocumentType> DocumentTypes { get; set; }  
 
-        // Constructeur par défaut
+  
         public TypeDossier()
         {
             Dossiers = new List<DossierAdministratif>();  // Initialiser la collection des dossiers
@@ -34,7 +34,6 @@ namespace CitizenServer.Domain.Entities
             DocumentTypes = new List<DocumentType>();  // Initialiser la collection des types de documents
         }
 
-        // Constructeur avec paramètres pour initialiser les propriétés
         public TypeDossier(Guid id, string name, string? description)
         {
             Id = id;
