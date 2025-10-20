@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 namespace CitizenServer.Domain.Aggregates
 {
-    // Agrégat racine pour représenter un citoyen
+   
     public class CitizenAggregate
     {
-        public Guid UserId { get; private set; }   // Identifiant unique du citoyen (venant du header)
+        public Guid UserId { get; private set; }   // Identifiant unique du citoyen 
 
         // Collections d'entités liées
         public List<DossierAdministratif> Dossiers { get; private set; }
         public List<Rendezvous> RendezvousList { get; private set; }
 
-        // Constructeur privé (DDD)
+        // Constructeur privé 
         private CitizenAggregate()
         {
             Dossiers = new List<DossierAdministratif>();
@@ -29,7 +29,7 @@ namespace CitizenServer.Domain.Aggregates
             };
         }
 
-        // Méthode métier : ajouter un dossier
+        //  ajouter un dossier
         public void AddDossier(DossierAdministratif dossier)
         {
             if (dossier == null) throw new ArgumentNullException(nameof(dossier));
@@ -39,7 +39,7 @@ namespace CitizenServer.Domain.Aggregates
             Dossiers.Add(dossier);
         }
 
-        // Méthode métier : ajouter un rendez-vous
+        //  ajouter un rendez-vous
         public void AddRendezvous(Rendezvous rendezvous)
         {
             if (rendezvous == null) throw new ArgumentNullException(nameof(rendezvous));
@@ -49,13 +49,13 @@ namespace CitizenServer.Domain.Aggregates
             RendezvousList.Add(rendezvous);
         }
 
-        // Exemple : récupérer tous les dossiers validés
+        // récupérer tous les dossiers validés
         public IEnumerable<DossierAdministratif> GetValidatedDossiers()
         {
             return Dossiers.FindAll(d => d.Status == "validé");
         }
 
-        // Exemple : récupérer tous les rendez-vous à venir
+        // récupérer tous les rendez-vous à venir
         public IEnumerable<Rendezvous> GetUpcomingRendezvous()
         {
             return RendezvousList.FindAll(r => r.AppointmentDate >= DateTime.Now);
