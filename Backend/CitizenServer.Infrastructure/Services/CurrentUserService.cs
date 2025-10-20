@@ -21,7 +21,7 @@ namespace CitizenServer.Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
         }
-        // === Headers envoyés par l'API Gateway ===
+       
         public string? UserId => GetHeader("X-User-Id");
         public string? Email => GetHeader("X-User-Email");
         public string? UserName => GetHeader("X-User-Name");
@@ -58,7 +58,7 @@ namespace CitizenServer.Infrastructure.Services
 
         public string GetClaim(string claimName) => GetHeader($"X-User-{claimName}") ?? string.Empty;
 
-        // === Lecture et debug des headers ===
+      
         private string? GetHeader(string headerName)
         {
             try
@@ -93,7 +93,7 @@ namespace CitizenServer.Infrastructure.Services
             }
         }
 
-        // === Log complet de tous les headers pertinents ===
+       
         private void LogAllHeaders(HttpContext context)
         {
             _logger.LogInformation("==== [DEBUG] Lecture des headers envoyés par l'API Gateway ====");
@@ -110,7 +110,7 @@ namespace CitizenServer.Infrastructure.Services
             _logger.LogInformation("==== [DEBUG] Fin de lecture des headers ====");
         }
 
-        // === Méthode pour debug complet de toutes les propriétés ===
+     
         public void LogCurrentUser()
         {
             _logger.LogInformation("==== [DEBUG] CurrentUserService properties ====");
