@@ -1,4 +1,4 @@
-// src/services/documentTypeService.js
+
 import axios from "axios";
 import keycloak from "../config/keycloak";
 
@@ -21,7 +21,6 @@ const getHeaders = () => ({
   "Content-Type": "application/json",
 });
 
-// ==================== DocumentType ====================
 
 export const getDocumentTypes = async () => {
   await ensureToken();
@@ -43,7 +42,7 @@ export const addDocumentType = async (docType) => {
   }
 
   const payload = {
-    id: docType.id || "00000000-0000-0000-0000-000000000000", // backend génère un nouvel ID
+    id: docType.id || "00000000-0000-0000-0000-000000000000", 
     name: docType.name.trim(),
     isImportable: docType.isImportable ?? false,
     category: docType.category || "",
