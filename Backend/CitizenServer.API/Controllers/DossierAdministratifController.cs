@@ -24,7 +24,7 @@ namespace CitizenService.API.Controllers
             _currentUser = currentUser;
         }
 
-        // ===== GET tous les dossiers =====
+        
         [HttpGet]
         [Authorize(Roles = "citizen,admin")]
         public async Task<IActionResult> GetDossiers()
@@ -51,7 +51,7 @@ namespace CitizenService.API.Controllers
             return Ok(dossiers);
         }
 
-        // ===== GET dossier par Id =====
+        
         [HttpGet("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetDossierById(Guid id)
@@ -72,7 +72,7 @@ namespace CitizenService.API.Controllers
             });
         }
 
-        // ===== POST nouveau dossier =====
+        // ajouter un dossier 
         [HttpPost]
         [Authorize(Roles = "citizen")]
         public async Task<IActionResult> AddDossier([FromBody] DossierAdministratif dossier)
@@ -114,7 +114,7 @@ namespace CitizenService.API.Controllers
             }
         }
 
-        // ===== DELETE dossier =====
+        // supprime un dossier
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> DeleteDossier(Guid id)
@@ -133,7 +133,7 @@ namespace CitizenService.API.Controllers
             return NoContent();
         }
 
-        // ===== PUT mettre à jour un dossier =====
+        //  mettre à jour un dossier 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateDossier(Guid id, [FromBody] DossierAdministratif updatedDossier)
@@ -176,7 +176,7 @@ namespace CitizenService.API.Controllers
             }
         }
 
-        // ===== POST ajouter document à un dossier =====
+        // ajouter document à un dossier
         [HttpPost("{dossierId}/documents")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> AddDocument(Guid dossierId, [FromBody] Document document)
