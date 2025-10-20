@@ -9,7 +9,7 @@ namespace CitizenService.Infrastructure.Repositories
     {
         private readonly CitizenServiceDbContext _context;
 
-        // Constructeur pour injecter le contexte de la base de données
+       
         public DossierAdministratifRepository(CitizenServiceDbContext context)
         {
             _context = context;
@@ -47,7 +47,7 @@ namespace CitizenService.Infrastructure.Repositories
             var dossier = await GetDossierByIdAsync(id);
             if (dossier != null)
             {
-                _context.Dossiers.Remove(dossier);  // Correction du nom du DbSet
+                _context.Dossiers.Remove(dossier);  
                 await _context.SaveChangesAsync();
             }
         }
