@@ -11,7 +11,7 @@ namespace CitizenServer.API.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    [Authorize] // Auth obligatoire
+    [Authorize] 
     public class TypeDossierController : ControllerBase
     {
         private readonly CitizenServiceDbContext _context;
@@ -21,7 +21,7 @@ namespace CitizenServer.API.Controllers
             _context = context;
         }
 
-        // === GET: tous les types de dossiers ===
+        // tous les types de dossiers 
         [HttpGet]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetTypeDossiers()
@@ -38,7 +38,7 @@ namespace CitizenServer.API.Controllers
             return Ok(typeDossiers);
         }
 
-        // === GET: type de dossier par Id ===
+        //  type de dossier par Id
         [HttpGet("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetTypeDossierById(Guid id)
@@ -59,7 +59,7 @@ namespace CitizenServer.API.Controllers
             return Ok(typeDossier);
         }
 
-        // === POST: créer un type de dossier (admin uniquement) ===
+        //  créer un type de dossier 
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddTypeDossier([FromBody] TypeDossier typeDossier)
@@ -74,7 +74,7 @@ namespace CitizenServer.API.Controllers
             return CreatedAtAction(nameof(GetTypeDossierById), new { id = typeDossier.Id }, typeDossier);
         }
 
-        // === PUT: mettre à jour un type de dossier (admin uniquement) ===
+        //  mettre à jour un type de dossier
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateTypeDossier(Guid id, [FromBody] TypeDossier updatedTypeDossier)
@@ -93,7 +93,7 @@ namespace CitizenServer.API.Controllers
             return NoContent();
         }
 
-        // === DELETE: supprimer un type de dossier (admin uniquement) ===
+        // supprimer un type de dossier
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteTypeDossier(Guid id)
