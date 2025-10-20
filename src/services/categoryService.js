@@ -3,7 +3,7 @@ import keycloak from '../config/keycloak';
 
 const apiUrl = 'http://localhost:5018/api/CitizenService/Category';
 
-// --- Récupérer les headers avec le token Keycloak ---
+// Récupérer les headers avec le token Keycloak 
 const getHeaders = () => {
   if (!keycloak.authenticated || !keycloak.token) {
     console.error('Token JWT non trouvé dans Keycloak !');
@@ -15,7 +15,7 @@ const getHeaders = () => {
   };
 };
 
-// --- Fonction générique pour requêtes Axios ---
+
 const fetchData = async (url, method, body = null) => {
   try {
     const response = await axios({
@@ -37,7 +37,7 @@ const fetchData = async (url, method, body = null) => {
   }
 };
 
-// --- CRUD Categories ---
+
 export const getCategories = async () => fetchData(apiUrl, 'GET');
 export const getCategoryById = async (id) => fetchData(`${apiUrl}/${id}`, 'GET');
 export const addCategory = async (category) => fetchData(apiUrl, 'POST', category);
