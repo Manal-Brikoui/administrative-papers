@@ -9,7 +9,7 @@ using CitizenServer.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===== Database =====
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CitizenServiceDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -17,17 +17,17 @@ builder.Services.AddDbContext<CitizenServiceDbContext>(options =>
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-// ===== CORS Configuration =====
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
-        builder => builder.WithOrigins("http://localhost:5173") // URL de ton frontend React
+        builder => builder.WithOrigins("http://localhost:5173") 
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials());
 });
 
-// ===== API Configuration (délégué à DependencyInjection) =====
+
 builder.Services.AddApi(builder.Configuration);
 builder.Services.AddAuthorization(options =>
 {
@@ -40,32 +40,29 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
-// ===== Middleware de debug (uniquement en développement) =====
 if (app.Environment.IsDevelopment())
 {
     app.Use(async (context, next) =>
     {
         var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-        logger.LogInformation("===== Headers reçus par le service Citizen =====");
+        logger.LogInformation("Headers reÃ§us par le service Citizen");
 
-        // Log uniquement les headers X-User-* pour éviter le spam
+        // Log uniquement les headers X-User-* pour Ã©viter le spam
         foreach (var header in context.Request.Headers.Where(h => h.Key.StartsWith("X-User-")))
         {
             logger.LogInformation("{Key}: {Value}", header.Key, header.Value.ToString());
         }
-        logger.LogInformation("===== Fin des headers =====");
+        logger.LogInformation("Fin des headers");
         await next();
     });
 }
 
-// ===== Database Migration =====
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CitizenServiceDbContext>();
     db.Database.Migrate();
 }
 
-// ===== Pipeline HTTP =====
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -74,11 +71,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();    // Configuré dans AddApi()
-app.UseAuthorization();     // Configuré dans AddApi()
+app.UseAuthentication();    
+app.UseAuthorization();     
 
-// ===== CORS Middleware =====
-app.UseCors("AllowReactApp"); // Ajout de la configuration CORS
+
+app.UseCors("AllowReactApp"); 
 
 app.MapControllers();
 
