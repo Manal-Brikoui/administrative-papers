@@ -97,14 +97,13 @@ const ProfilePage = () => {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      {/* Phrase d’accueil */}
-      {/* Phrase d’accueil */}
+     
 <div style={{ marginBottom: '1.5rem', fontSize: '1.2rem', color: '#180f01ff', fontWeight: 'bold' }}>
   Mettez à jour vos informations personnelles pour garder votre compte SmartBerkane à jour et sécurisé.
 </div>
   
 
-      {/* Profil Section */}
+     
       <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
         <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem', color: '#0f0601' }}>
           <img src={profilIcon} alt="Profil" style={{ width: '32px', height: '32px' }} />
@@ -153,7 +152,6 @@ const ProfilePage = () => {
   );
 };
 
-// Styles réutilisables
 const inputStyle = {
   width: '100%',
   padding: '0.5rem',
