@@ -100,7 +100,7 @@ namespace CitizenServer.Application.Services
             return true;
         }
 
-        // Mapping Entity -> DTO
+       
         private static NotificationDTO MapToDTO(Notification entity)
         {
             return new NotificationDTO
