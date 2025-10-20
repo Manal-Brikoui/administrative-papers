@@ -13,13 +13,13 @@ function App() {
     return <div>Chargement de l’authentification...</div>;
   }
 
-  // ✅ Vérification du login et des rôles
+
   const isAuthenticated = keycloak?.authenticated || false;
   const roles = keycloak?.tokenParsed?.realm_access?.roles || [];
   const isAdmin = isAuthenticated && roles.includes("admin");
   const isCitizen = isAuthenticated && roles.includes("citizen");
 
-  // 🔍 Debug - affiche les rôles dans la console
+
   console.log("Utilisateur connecté:", isAuthenticated);
   console.log("Rôles reçus:", roles);
 
@@ -31,14 +31,14 @@ function App() {
         fontFamily: "Arial, sans-serif",
       }}
     >
-      {/* ✅ Navbar toujours visible */}
+   
       <Navbar />
 
       <Routes>
-        {/* Route publique */}
+
         <Route path="/" element={<HomePage />} />
 
-        {/* Route Admin protégée */}
+   
         <Route
           path="/admin"
           element={
@@ -53,7 +53,7 @@ function App() {
           }
         />
 
-        {/* Route Citizen protégée */}
+      
         <Route
           path="/citizen"
           element={
@@ -68,7 +68,6 @@ function App() {
           }
         />
 
-        {/* Page Profile (accessible seulement si connecté) */}
         <Route
           path="/profile"
           element={
@@ -80,7 +79,6 @@ function App() {
           }
         />
 
-        {/* Redirection fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
