@@ -24,7 +24,7 @@ namespace CitizenService.API.Controllers
             _currentUser = currentUser;
         }
 
-        // === Informations du citoyen ===
+        // Informations du citoyen 
         [HttpGet("citizen-info")]
         [Authorize(Roles = "citizen")]
         public IActionResult GetCitizenInfo()
@@ -56,7 +56,7 @@ namespace CitizenService.API.Controllers
             }
         }
 
-        // === Dossiers du citoyen ===
+        //  Dossiers du citoyen
         [HttpGet("dossiers")]
         [Authorize(Roles = "citizen")]
         public async Task<IActionResult> GetDossiers()
@@ -91,7 +91,7 @@ namespace CitizenService.API.Controllers
             }
         }
 
-        // === Notifications du citoyen ===
+        // Notifications du citoyen 
         [HttpGet("notifications")]
         [Authorize(Roles = "citizen")]
         public async Task<IActionResult> GetNotifications()
