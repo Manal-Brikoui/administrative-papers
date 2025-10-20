@@ -15,30 +15,30 @@ namespace CitizenServer.Domain.Entities
         [Key]
         public Guid Id { get; set; }
 
-        // Nom de la catégorie (obligatoire)
+        // Nom de la catégorie 
         [Required]
         public string Name { get; set; }
 
-        // Description optionnelle de la catégorie
+       
         public string? Description { get; set; }
 
-        // Relation avec DocumentType : Une catégorie peut contenir plusieurs types de documents
+        //  Une catégorie peut contenir plusieurs types de documents
         public ICollection<DocumentType> DocumentTypes { get; set; }
 
-        // Constructeur par défaut
+  
         public Category()
         {
-            Id = Guid.NewGuid();  // Génération automatique d'un identifiant unique
-            DocumentTypes = new List<DocumentType>();  // Initialisation de la collection des types de documents
+            Id = Guid.NewGuid();  
+            DocumentTypes = new List<DocumentType>();  
         }
 
-        // Constructeur avec paramètres
+     
         public Category(Guid id, string name, string? description)
         {
             Id = id;
             Name = name;
             Description = description;
-            DocumentTypes = new List<DocumentType>();  // Initialisation de la collection des types de documents
+            DocumentTypes = new List<DocumentType>();  
         }
     }
 }
