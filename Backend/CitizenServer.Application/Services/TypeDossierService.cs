@@ -80,7 +80,6 @@ namespace CitizenServer.Application.Services
             return true;
         }
 
-        // Mapping Entity -> DTO
         private static TypeDossierDTO MapToDTO(TypeDossier entity)
         {
             return new TypeDossierDTO
