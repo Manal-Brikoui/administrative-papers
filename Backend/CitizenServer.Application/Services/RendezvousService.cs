@@ -82,7 +82,7 @@ namespace CitizenServer.Application.Services
             return true;
         }
 
-        // Mapping Entity -> DTO
+       
         private static RendezvousDTO MapToDTO(Rendezvous entity)
         {
             return new RendezvousDTO
