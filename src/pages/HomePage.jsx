@@ -5,7 +5,7 @@ const HomePage = () => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "calc(100vh - 90px)", // moins la hauteur du Navbar
+    height: "calc(100vh - 90px)", 
     backgroundColor: "#eb6a0eff",
     padding: "1rem",
   };
@@ -13,9 +13,9 @@ const HomePage = () => {
   const textStyle = {
     textAlign: "center",
     fontSize: "1.5rem",
-    color: "#000000", // texte en noir
+    color: "#000000", 
     fontWeight: "500",
-    fontStyle: "italic", // texte en italique
+    fontStyle: "italic", 
     padding: "1rem 2rem",
     maxWidth: "700px",
     lineHeight: "1.8",
@@ -23,9 +23,9 @@ const HomePage = () => {
   };
 
   const highlightStyle = {
-    fontWeight: "700",      // mettre en gras
-    fontSize: "1.6rem",     // légèrement plus grand
-    color: "#040404ff",       // couleur orange SmartBerkane
+    fontWeight: "700",      
+    fontSize: "1.6rem",    
+    color: "#040404ff",       
   };
 
   return (
