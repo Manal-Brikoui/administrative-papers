@@ -1,4 +1,4 @@
-// src/pages/AdminPage.jsx
+
 import React, { useEffect, useState } from "react";
 import keycloak from "../config/keycloak";
 import "./admin.css";
@@ -64,7 +64,7 @@ const AdminPage = () => {
   const [rendezvous, setRendezvous] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // === Form States ===
+
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newTypeDossierName, setNewTypeDossierName] = useState("");
   const [newDocumentType, setNewDocumentType] = useState({ name: "", categoryId: "", typeDossierId: "" });
@@ -74,7 +74,6 @@ const AdminPage = () => {
   const [newDocumentIsOnPlatform, setNewDocumentIsOnPlatform] = useState(true);
   const [newDocumentImportLocation, setNewDocumentImportLocation] = useState("");
 
-  // === Editing States ===
   const [editingCategory, setEditingCategory] = useState({ id: null, name: "" });
   const [editingTypeDossier, setEditingTypeDossier] = useState({ id: null, name: "" });
   const [editingDocumentType, setEditingDocumentType] = useState({ id: null, name: "", categoryId: "", typeDossierId: "" });
@@ -84,14 +83,14 @@ const AdminPage = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  const [activeSection, setActiveSection] = useState("dashboard"); // par défaut
+  const [activeSection, setActiveSection] = useState("dashboard"); 
 
 
 
-  // === Dossier Editing ===
+
   const [editingDossier, setEditingDossier] = useState(null);
 
-// === Fonction pour récupérer tous les documents du backend ===
+
 const fetchDocuments = async () => {
   try {
     const allDocs = await getDocuments(); // service backend
@@ -101,7 +100,7 @@ const fetchDocuments = async () => {
   }
 };
 
-// === Appelle fetchDocuments au chargement de la page ===
+
 useEffect(() => {
   fetchDocuments();
   fetchDossiers();
@@ -110,18 +109,18 @@ useEffect(() => {
 
 const fetchDossiers = async () => {
   try {
-    const data = await getDossiers(); // Utilise ton service
+    const data = await getDossiers(); 
     setDossiers(data);
   } catch (error) {
     console.error("Erreur récupération dossiers:", error);
   }
 };
 
-// state pour garder le document choisi par dossier
 
 
 
-// Appel au chargement
+
+
 useEffect(() => {
   if (keycloak.authenticated) {
     fetchDossiers();
@@ -132,7 +131,7 @@ useEffect(() => {
 }, [keycloak.authenticated]);
 
 
-  // === Fetch data on load ===
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -171,9 +170,7 @@ useEffect(() => {
     fetchData();
   }, []);
 
-  // === Handlers ===
 
-  // --- Categories ---
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) return alert("Nom requis !");
     try {
@@ -208,7 +205,6 @@ useEffect(() => {
     }
   };
 
-  // --- TypeDossier ---
   const handleAddTypeDossier = async () => {
     if (!newTypeDossierName.trim()) return alert("Nom requis !");
     try {
@@ -243,7 +239,6 @@ useEffect(() => {
     }
   };
 
-  // --- DocumentType ---
   const handleAddDocumentType = async () => {
     if (!newDocumentType.name.trim() || !newDocumentType.categoryId || !newDocumentType.typeDossierId)
       return alert("Nom, catégorie et type de dossier requis !");
@@ -342,7 +337,7 @@ useEffect(() => {
     }
   };
 
-  // --- Dossier ---
+
   const handleEditDossier = (dossier) => {
   if (!dossier) return;
   setEditingDossier({
@@ -384,7 +379,6 @@ const handleUpdateDossier = async (id) => {
   }
 };
 
-  // --- Notification ---
   const handleDeleteNotification = async (id) => {
     if (!window.confirm("Supprimer cette notification ?")) return;
     try {
@@ -395,7 +389,6 @@ const handleUpdateDossier = async (id) => {
     }
   };
 
-  // --- Rendezvous ---
   const handleValidateRendezvous = async (id, approved) => {
     try {
       await validateRendezvous(id, approved ? "validé" : "refusé");
@@ -417,7 +410,7 @@ const handleUpdateDossier = async (id) => {
     }
   };
 
-  // === Render ===
+
   if (loading) return <div>Chargement...</div>;
   return (
   <div className={`admin-container ${isSidebarOpen ? "sidebar-open" : ""}`}>
@@ -433,7 +426,7 @@ const handleUpdateDossier = async (id) => {
     <div className="admin-main">
       <h2>Espace Administratif</h2>
 
-      {/* === Categories & TypeDossier horizontal === */}
+    
       <div className="horizontal-sections">
         
         {/* Categories Section */}
@@ -495,7 +488,7 @@ const handleUpdateDossier = async (id) => {
           </ul>
         </div>
 
-        {/* TypeDossier Section */}
+     
         <div className="section card type-dossier-section">
           <h3>
             Types de Dossier
@@ -553,7 +546,6 @@ const handleUpdateDossier = async (id) => {
 
       </div>
 
-      {/* === DocumentType Section === */}
 <div className="document-type-section">
   <h3>
     <img src={documentationIcon} alt="Types de Documents" className="icon" />
@@ -608,7 +600,7 @@ const handleUpdateDossier = async (id) => {
     </button>
   </div>
 
-  {/* Liste des types de documents */}
+
   <ul className="document-type-list">
     {documentTypes.map((dt) => (
       <li key={dt.id}>
@@ -700,7 +692,7 @@ const handleUpdateDossier = async (id) => {
     ))}
   </ul>
 </div>
-{/* === Documents Section === */}
+
 <div className="documents-section" style={{ marginTop: "20px" }}>
   <h3>
     <img src={fileIcon} alt="Ajouter un document" className="icon" />
@@ -912,7 +904,7 @@ const handleUpdateDossier = async (id) => {
     </tbody>
   </table>
 </div>
-{/* === Dossiers Administratifs Section ===*/}
+
 <div className="dossiers-section" style={{ marginTop: "20px", width: "100%" }}>
   <h3 style={{ display: "flex", alignItems: "center", gap: "10px", color: "#0f0601" }}>
     <img src={folderIcon} alt="Dossiers" style={{ width: "24px", height: "24px" }} />
@@ -1010,7 +1002,7 @@ const handleUpdateDossier = async (id) => {
   </table>
 </div>
 
-{/* === Notifications Section === */}
+
 {activeSection === "notifications" && (
   <div className="notifications-section" style={{ marginTop: '20px' }}>
     <h3
@@ -1043,7 +1035,7 @@ const handleUpdateDossier = async (id) => {
               borderBottom: '1px solid #ddd'
             }}
           >
-            {/* Toujours afficher le message par défaut pour admin */}
+           
             <span>
               {"Un citoyen a pris un rendez-vous. Veuillez vérifier."}
             </span>
@@ -1069,7 +1061,6 @@ const handleUpdateDossier = async (id) => {
   </div>
 )}
 
-      {/* === Rendez-vous Section === */}
 {activeSection === "rendezvous" && (
   <div className="rendezvous-section">
     <h3 style={{ display: "flex", alignItems: "center", gap: "10px", color: "#0f0601" }}>
@@ -1128,8 +1119,8 @@ const handleUpdateDossier = async (id) => {
     </table>
   </div>
 )}
-    </div> {/* end admin-main */}
-  </div> /* end admin-container */
+    </div> 
+  </div> 
 );
 };
 
