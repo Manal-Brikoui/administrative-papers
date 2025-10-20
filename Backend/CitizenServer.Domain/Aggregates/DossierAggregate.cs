@@ -4,10 +4,7 @@ using CitizenServer.Domain.Entities;
 
 namespace CitizenServer.Domain.Aggregates
 {
-    /// <summary>
-    /// Agrégat qui représente un Dossier Administratif et regroupe
-    /// toutes les règles métier liées au dossier, ses documents et rendez-vous.
-    /// </summary>
+   
     public class DossierAggregate
     {
         // Propriété principale du dossier
@@ -21,7 +18,7 @@ namespace CitizenServer.Domain.Aggregates
         public IReadOnlyCollection<Rendezvous> Rendezvous => (IReadOnlyCollection<Rendezvous>)_rendezvous;
         private readonly List<Rendezvous> _rendezvous;
 
-        // Constructeur
+
         public DossierAggregate(DossierAdministratif dossier)
         {
             Dossier = dossier ?? throw new ArgumentNullException(nameof(dossier));
@@ -29,9 +26,6 @@ namespace CitizenServer.Domain.Aggregates
             _rendezvous = new List<Rendezvous>();
         }
 
-        /// <summary>
-        /// Ajouter un document au dossier.
-        /// </summary>
         public void AddDocument(Document document)
         {
             if (document == null)
@@ -40,9 +34,7 @@ namespace CitizenServer.Domain.Aggregates
             _documents.Add(document);
         }
 
-        /// <summary>
-        /// Associer un rendez-vous au dossier.
-        /// </summary>
+    
         public void AddRendezvous(Rendezvous rendezvous)
         {
             if (rendezvous == null)
@@ -51,11 +43,7 @@ namespace CitizenServer.Domain.Aggregates
             _rendezvous.Add(rendezvous);
         }
 
-        /// <summary>
-        /// Valider le dossier (par exemple après vérification des documents).
-        /// </summary>
-        public void Validate()
-        {
+       
             if (!_documents.Any())
                 throw new InvalidOperationException("Impossible de valider un dossier sans documents.");
 
@@ -63,12 +51,10 @@ namespace CitizenServer.Domain.Aggregates
             Dossier.ValidationDate = DateTime.UtcNow;
             Dossier.IsCompleted = true;
 
-            // Ici on pourrait lever un DomainEvent : DossierValidatedEvent
+           
         }
 
-        /// <summary>
-        /// Vérifier si le dossier est complet (tous les documents requis présents).
-        /// </summary>
+       
         public bool IsComplete()
         {
             return Dossier.IsCompleted && _documents.Any();
