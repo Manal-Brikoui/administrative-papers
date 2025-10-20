@@ -1,4 +1,4 @@
- /* --- Container principal --- */
+
 .admin-container {
   display: flex;
   flex-direction: row;
@@ -7,7 +7,7 @@
   margin: 0 auto;
 }
 
-/* --- Contenu principal --- */
+
 .admin-content {
   flex: 1;
   padding: 2rem;
@@ -21,12 +21,11 @@
   width: 100%;
 }
 
-/* Sidebar ouverte */
+
 .admin-container.sidebar-open .admin-content {
   margin-left: 270px;
 }
 
-/* --- Sidebar --- */
 .sidebar {
   position: fixed;
   top: 0;
@@ -41,12 +40,12 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Sidebar ouverte */
+
 .sidebar.open {
   width: 250px; /* largeur élargie */
 }
 
-/* Bouton menu */
+
 .menu-btn {
   background: none;
   border: none;
@@ -62,7 +61,7 @@
   object-fit: contain;
 }
 
-/* Contenu sidebar */
+
 .sidebar-content {
   display: flex;
   flex-direction: column;
@@ -70,7 +69,7 @@
   gap: 10px;
 }
 
-/* Items */
+
 .sidebar-item {
   display: flex;
   align-items: center;
@@ -94,7 +93,7 @@
   font-weight: 500;
 }
 
-/* Hover */
+
 .sidebar-item:hover {
   background-color: #ff7b00;
   color: #fff;
@@ -104,7 +103,7 @@
   filter: brightness(0) invert(1);
 }
 
-/* Badge */
+
 .badge {
   position: absolute;
   top: 8px;
@@ -119,7 +118,7 @@
   text-align: center;
   line-height: 1;
 }
-/* --- Sections horizontales centrées --- */
+
 .horizontal-sections {
   display: flex;
   justify-content: center;
@@ -131,7 +130,7 @@
   margin: 0 auto 30px auto;
 }
 
-/* Style général des sections */
+
 .section {
   flex: 1;
   min-width: 350px;
@@ -299,7 +298,7 @@
   margin-right: 5px;
 }
 
-/* === Section Documents === */
+
 .documents-section {
   background-color: #fef7ed;
   border: 2px solid #ffa500;
@@ -444,7 +443,7 @@
     font-size: 0.85rem;
   }
 }
-/* === DocumentType Section === */
+
 .document-type-section {
   margin: 20px 0;
   padding: 20px;
@@ -468,7 +467,6 @@
   margin-right: 10px;
 }
 
-/* === Form Group === */
 .document-type-section .form-group {
   display: flex;
   align-items: center;
@@ -492,7 +490,7 @@
   border-color: #ff7a00;
 }
 
-/* === Button Ajouter === */
+
 .document-type-section .btn-add {
   display: flex;
   align-items: center;
@@ -516,7 +514,6 @@
   height: 20px;
 }
 
-/* === Liste des Types de Documents === */
 .document-type-list {
   list-style: none;
   margin: 0;
@@ -560,7 +557,7 @@
 .document-type-list li button:last-of-type:hover {
   background: #dca871;
 }
-/* === Section Dossiers Administratifs === */
+
 .dossiers-section {
   background-color: #fef7ed;
   border: 2px solid #ffa500;
@@ -650,7 +647,7 @@
   background-color: #ef6c00;
 }
 
-/* Responsive */
+
 @media screen and (max-width: 900px) {
   .dossiers-section {
     padding: 15px;
@@ -668,7 +665,7 @@
     max-width: 100%;
   }
 }
-/* === Rendez-vous Section === */
+
 .rendezvous-section {
   background-color: #fef7ed;
   border: 2px solid #ffa500;
@@ -750,10 +747,10 @@
 .btn-delete:hover {
   background-color: #ef6c00;
 }
-/* === Notifications Section (Harmonisée avec l'orange) === */
+
 .notifications-section {
-  background-color: #fff3e0; /* fond ivoire, harmonisé avec orange */
-  border: 2px solid #ff9800; /* contour orange */
+  background-color: #fff3e0; 
+  border: 2px solid #ff9800; 
   border-radius: 10px;
   padding: 20px;
   margin: 20px auto;
@@ -763,7 +760,7 @@
 
 .notifications-section h3 {
   margin-bottom: 15px;
-  color: #e65100; /* titre orange foncé */
+  color: #e65100;
   text-align: left;
   font-weight: bold;
 }
@@ -780,13 +777,13 @@
   align-items: center;
   padding: 8px 12px;
   margin-bottom: 8px;
-  background-color: #fff8e1; /* jaune très clair, harmonisé avec orange */
+  background-color: #fff8e1; 
   border-radius: 6px;
   transition: background 0.3s;
 }
 
 .notifications-list li:hover {
-  background-color: #ffe0b2; /* légèrement plus foncé au hover */
+  background-color: #ffe0b2; 
 }
 
 .notifications-list li span {
@@ -796,7 +793,7 @@
 }
 
 .notifications-list button.btn-delete {
-  background-color: #ff9800; /* orange vif */
+  background-color: #ff9800; 
   color: white;
   border: none;
   border-radius: 5px;
@@ -806,7 +803,7 @@
 }
 
 .notifications-list button.btn-delete:hover {
-  background-color: #ef6c00; /* orange foncé au hover */
+  background-color: #ef6c00;
 }
 
 
