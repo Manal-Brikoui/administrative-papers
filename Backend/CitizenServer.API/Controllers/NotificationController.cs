@@ -12,7 +12,7 @@ namespace CitizenServer.API.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    [Authorize] // Authentification obligatoire
+    [Authorize] 
     public class NotificationController : ControllerBase
     {
         private readonly CitizenServiceDbContext _context;
@@ -24,8 +24,8 @@ namespace CitizenServer.API.Controllers
             _currentUser = currentUser;
         }
 
-        // === Récupérer toutes les notifications ===
-        // === Récupérer toutes les notifications ===
+        // Récupérer toutes les notifications
+        
         [HttpGet]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetNotifications()
@@ -66,7 +66,7 @@ namespace CitizenServer.API.Controllers
             return Ok(notificationsWithMessage);
         }
 
-        // === Récupérer une notification par ID ===
+        // Récupérer une notification par ID
         [HttpGet("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetNotificationById(Guid id)
@@ -99,7 +99,7 @@ namespace CitizenServer.API.Controllers
             return Ok(notification);
         }
 
-        // === Créer une notification (admin uniquement) ===
+        //Créer une notification 
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateNotification([FromBody] Notification notification)
@@ -116,7 +116,7 @@ namespace CitizenServer.API.Controllers
             return CreatedAtAction(nameof(GetNotificationById), new { id = notification.Id }, notification);
         }
 
-        // === Mettre à jour une notification (admin uniquement) ===
+        //  Mettre à jour une notification
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateNotification(Guid id, [FromBody] Notification updatedNotification)
@@ -136,7 +136,7 @@ namespace CitizenServer.API.Controllers
             return NoContent();
         }
 
-        // === Supprimer une notification (admin ou citizen si c’est la sienne) ===
+        // Supprimer une notification
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> DeleteNotification(Guid id)
