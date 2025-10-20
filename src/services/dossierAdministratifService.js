@@ -3,20 +3,20 @@ import keycloak from '../config/keycloak';
 
 const apiUrl = 'http://localhost:5018/api/CitizenService/DossierAdministratif';
 
-// --- Rafraîchir le token Keycloak avant chaque requête ---
+
 const ensureToken = async () => {
   if (!keycloak.authenticated) throw new Error("Utilisateur non authentifié !");
   try {
     // Rafraîchit le token si son expiration est inférieure à 30 secondes
     await keycloak.updateToken(30);
   } catch (err) {
-    console.error("❌ Erreur lors du rafraîchissement du token:", err);
+    console.error(" Erreur lors du rafraîchissement du token:", err);
     throw new Error("Échec du rafraîchissement du token");
   }
   if (!keycloak.token) throw new Error("Token invalide !");
 };
 
-// --- Récupérer les headers avec le token ---
+
 const getHeaders = () => {
   const token = keycloak.token;
   const userId = keycloak.tokenParsed?.sub;
@@ -27,13 +27,12 @@ const getHeaders = () => {
     'Content-Type': 'application/json',
   };
 
-  if (userId) headers['X-User-Id'] = userId; // utile si ton CurrentUserService lit ce header
+  if (userId) headers['X-User-Id'] = userId; 
 
-  console.log("➡️ Headers envoyés:", headers); // debug
+  console.log(" Headers envoyés:", headers); 
   return headers;
 };
 
-// --- Fonction générique Axios ---
 const fetchData = async (endpoint = '', method = 'GET', body = null) => {
   await ensureToken();
   try {
@@ -50,22 +49,22 @@ const fetchData = async (endpoint = '', method = 'GET', body = null) => {
   }
 };
 
-// --- Gestion des erreurs API ---
+
 const handleApiError = (error) => {
   if (error.response) {
-    console.error("❌ Erreur API:", 
+    console.error(" Erreur API:", 
       error.response.data?.error || 
       error.response.data?.message || 
       error.response.statusText
     );
   } else if (error.request) {
-    console.error("❌ Aucune réponse reçue de l'API");
+    console.error(" Aucune réponse reçue de l'API");
   } else {
-    console.error("❌ Erreur Axios:", error.message);
+    console.error(" Erreur Axios:", error.message);
   }
 };
 
-// === Fonctions CRUD dossiers ===
+
 
 // Récupérer tous les dossiers
 export const getDossiers = async () => fetchData('', 'GET');
@@ -90,7 +89,7 @@ export const updateDossier = async (id, dossier) => {
 // Supprimer un dossier
 export const deleteDossier = async (id) => fetchData(id, 'DELETE');
 
-// === Ajouter un document à un dossier ===
+//  Ajouter un document à un dossier
 export const addDocumentToDossier = async (dossierId, document) => {
   if (!document.type || !document.filePath) {
     throw new Error("type et filePath sont obligatoires pour ajouter un document.");
