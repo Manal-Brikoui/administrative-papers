@@ -13,7 +13,7 @@ namespace CitizenServer.Infrastructure.Repositories
     {
         private readonly CitizenServiceDbContext _context;
 
-        // Constructeur pour injecter le contexte de la base de données
+     
         public TypeDossierRepository(CitizenServiceDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -42,7 +42,7 @@ namespace CitizenServer.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(typeDossier));
 
             await _context.TypeDossiers.AddAsync(typeDossier);  // Ajouter un nouveau type de dossier
-            await _context.SaveChangesAsync();  // Sauvegarder les changements dans la base de données
+            await _context.SaveChangesAsync();  
         }
 
         // Mettre à jour un type de dossier existant
@@ -52,7 +52,7 @@ namespace CitizenServer.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(typeDossier));
 
             _context.TypeDossiers.Update(typeDossier);  // Mettre à jour le type de dossier
-            await _context.SaveChangesAsync();  // Sauvegarder les changements dans la base de données
+            await _context.SaveChangesAsync();  
         }
 
         // Supprimer un type de dossier par son identifiant
@@ -62,7 +62,7 @@ namespace CitizenServer.Infrastructure.Repositories
             if (typeDossier != null)
             {
                 _context.TypeDossiers.Remove(typeDossier);  // Supprimer le type de dossier
-                await _context.SaveChangesAsync();  // Sauvegarder les changements dans la base de données
+                await _context.SaveChangesAsync();  
             }
             else
             {
