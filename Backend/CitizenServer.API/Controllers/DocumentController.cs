@@ -24,7 +24,7 @@ namespace CitizenServer.API.Controllers
             _currentUser = currentUser;
         }
 
-        // === Récupérer tous les documents ===
+        // Récupérer tous les documents
         [HttpGet]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetDocuments()
@@ -46,7 +46,7 @@ namespace CitizenServer.API.Controllers
             return Ok(documents); // Toujours un tableau, même vide
         }
 
-        // === Récupérer un document par ID ===
+        // Récupérer un document par ID
         [HttpGet("{documentId:guid}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetDocumentById(Guid documentId)
@@ -61,7 +61,7 @@ namespace CitizenServer.API.Controllers
             return Ok(document);
         }
 
-        // === Ajouter un document ===
+        // Ajouter un document
         [HttpPost]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> AddDocument([FromBody] Document document)
@@ -91,7 +91,7 @@ namespace CitizenServer.API.Controllers
             return CreatedAtAction(nameof(GetDocumentById), new { documentId = document.Id }, document);
         }
 
-        // === Mettre à jour un document ===
+        // Mettre à jour un document
         [HttpPut("{documentId:guid}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> UpdateDocument(Guid documentId, [FromBody] Document updatedDocument)
@@ -106,7 +106,7 @@ namespace CitizenServer.API.Controllers
             if (!_currentUser.IsInRole("admin") && document.UserId.ToString() != _currentUser.UserId)
                 return Forbid("Accès interdit à ce document.");
 
-            // Mise à jour des champs autorisés pour tous
+            
             document.Type = updatedDocument.Type;
             document.FilePath = updatedDocument.FilePath;
 
@@ -121,7 +121,7 @@ namespace CitizenServer.API.Controllers
             return NoContent();
         }
 
-        // === Supprimer un document ===
+        // Supprimer un document
         [HttpDelete("{documentId:guid}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> DeleteDocument(Guid documentId)
