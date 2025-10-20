@@ -1,4 +1,4 @@
-// components/Navbar.js
+
 import { useKeycloak } from '@react-keycloak/web';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/logo1.jpg';
@@ -37,7 +37,7 @@ const Navbar = () => {
     flexWrap: 'wrap'
   };
 
-  // Tous les liens en noir
+ 
   const linkStyle = {
     color: '#000000', 
     textDecoration: 'none',
