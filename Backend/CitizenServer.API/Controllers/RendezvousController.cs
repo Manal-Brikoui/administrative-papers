@@ -10,7 +10,7 @@ namespace CitizenServer.API.Controllers
 {
     [Route("/[controller]")]
     [ApiController]
-    [Authorize] // Sécurise tout le controller
+    [Authorize] 
     public class RendezvousController : ControllerBase
     {
         private readonly CitizenServiceDbContext _context;
@@ -22,7 +22,7 @@ namespace CitizenServer.API.Controllers
             _currentUser = currentUser;
         }
 
-        // === Créer un rendez-vous (citizen uniquement) ===
+        // Créer un rendez-vous 
         [HttpPost]
         [Authorize(Roles = "citizen")]
         public async Task<IActionResult> AddRendezvous([FromBody] Rendezvous rendezvous)
@@ -56,7 +56,7 @@ namespace CitizenServer.API.Controllers
             return CreatedAtAction(nameof(GetRendezvousById), new { id = rendezvous.Id }, dto);
         }
 
-        // === Valider ou refuser un rendez-vous (admin uniquement) ===
+        // Valider ou refuser un rendez-vous 
         [HttpPut("{id}/validate")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> ValidateRendezvous(Guid id, [FromBody] string status)
@@ -96,7 +96,7 @@ namespace CitizenServer.API.Controllers
             return Ok(new { message = $"Rendez-vous {status} et notification envoyée.", rendezvous });
         }
 
-        // === Récupérer un rendez-vous par ID ===
+        // Récupérer un rendez-vous par ID
         [HttpGet("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetRendezvousById(Guid id)
@@ -124,7 +124,7 @@ namespace CitizenServer.API.Controllers
             return Ok(dto);
         }
 
-        // === Récupérer tous les rendez-vous (admin uniquement) ===
+        // Récupérer tous les rendez-vous 
         [HttpGet]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> GetAllRendezvous()
@@ -144,7 +144,7 @@ namespace CitizenServer.API.Controllers
             return Ok(rendezvousList);
         }
 
-        // === Supprimer un rendez-vous ===
+        // Supprimer un rendez-vous
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin,citizen")]
         public async Task<IActionResult> DeleteRendezvous(Guid id)
