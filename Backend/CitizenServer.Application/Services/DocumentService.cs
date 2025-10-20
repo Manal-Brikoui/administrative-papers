@@ -42,7 +42,7 @@ namespace CitizenServer.Application.Services
             return MapToDTO(document);
         }
 
-        // Ajouter / Upload un document
+        
         public async Task<DocumentDTO> UploadDocumentAsync(DocumentDTO dto)
         {
             var entity = MapToEntity(dto);
@@ -85,7 +85,7 @@ namespace CitizenServer.Application.Services
             return true;
         }
 
-        // 🔹 Mapping Entity → DTO
+        
         private static DocumentDTO MapToDTO(Document entity)
         {
             return new DocumentDTO
@@ -101,7 +101,7 @@ namespace CitizenServer.Application.Services
             };
         }
 
-        // 🔹 Mapping DTO → Entity
+        
         private static Document MapToEntity(DocumentDTO dto)
         {
             return new Document
