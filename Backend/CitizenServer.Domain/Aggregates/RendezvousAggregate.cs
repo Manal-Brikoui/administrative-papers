@@ -3,9 +3,7 @@ using CitizenServer.Domain.Entities;
 
 namespace CitizenServer.Domain.Aggregates
 {
-    /// <summary>
-    /// Aggregate Root pour gérer un Rendezvous et sa logique métier.
-    /// </summary>
+    
     public class RendezvousAggregate
     {
         public Rendezvous Rendezvous { get; private set; }
@@ -26,9 +24,7 @@ namespace CitizenServer.Domain.Aggregates
             };
         }
 
-        /// <summary>
-        /// Confirmer le rendez-vous (par un admin par exemple).
-        /// </summary>
+        //confirmation des rendez-vous 
         public void Confirmer()
         {
             if (Rendezvous.Status == "Annulé")
@@ -37,9 +33,7 @@ namespace CitizenServer.Domain.Aggregates
             Rendezvous.Status = "Confirmé";
         }
 
-        /// <summary>
-        /// Annuler le rendez-vous.
-        /// </summary>
+       //annulation des rendez-vous 
         public void Annuler()
         {
             if (Rendezvous.Status == "Confirmé" && Rendezvous.AppointmentDate <= DateTime.Now)
@@ -48,9 +42,9 @@ namespace CitizenServer.Domain.Aggregates
             Rendezvous.Status = "Annulé";
         }
 
-        /// <summary>
-        /// Reprogrammer le rendez-vous à une nouvelle date.
-        /// </summary>
+  
+        // Reprogrammer le rendez-vous à une nouvelle date.
+       
         public void Reprogrammer(DateTime nouvelleDate)
         {
             if (nouvelleDate <= DateTime.Now)
