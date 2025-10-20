@@ -37,7 +37,7 @@ import { getCategories, getCategoryById } from "../services/categoryService";
 import { getTypeDossiers } from "../services/typeDossierService";
 import { getNotifications, deleteNotification } from "../services/notificationService";
 
-// ✅ Import rendezvous service
+//  Import rendezvous service
 import {
   addRendezvous,
   getRendezvousById,
@@ -46,7 +46,7 @@ import {
 } from "../services/rendezvousService";
 
 const CitizenPage = () => {
-  // === States principaux ===
+
   const [documents, setDocuments] = useState([]);
   const [documentTypes, setDocumentTypes] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -57,17 +57,17 @@ const CitizenPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  // ✅ Active section pour Sidebar
+
   const [activeSection, setActiveSection] = useState("dossiers");
 
-  // === State Dossier ===
+
   const [newDossier, setNewDossier] = useState({
     typeDossierId: "",
     status: "En cours",
     isCompleted: false,
   });
 
-  // === State Document ===
+
   const [newDocument, setNewDocument] = useState({
     type: "",
     dossierAdministratifId: "",
@@ -77,7 +77,7 @@ const CitizenPage = () => {
   });
   const [editDocument, setEditDocument] = useState(null);
 
-  // === State Rendezvous ===
+
   const [appointmentDate, setAppointmentDate] = useState("");
   const [typeDossierId, setTypeDossierId] = useState("");
   const [rendezvousId, setRendezvousId] = useState("");
@@ -85,17 +85,16 @@ const CitizenPage = () => {
   const [rdvMessage, setRdvMessage] = useState("");
   const [rendezvousList, setRendezvousList] = useState([]);
 
-  // === Infos user ===
+  
   const userId = keycloak?.tokenParsed?.sub || null;
   const isAdmin = keycloak?.tokenParsed?.realm_access?.roles?.includes("admin");
 
-  // === Autres states ===
+
   const [citizenInfo, setCitizenInfo] = useState(null);
   const [dossiers, setDossiers] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // === Charger données initiales ===
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -116,14 +115,14 @@ const CitizenPage = () => {
           getTypeDossiers(),
         ]);
 
-        // Filtrer selon l'utilisateur
+      
         setDossiers(allDossiers.filter((d) => d.userId === userId || isAdmin));
         setDocuments(allDocuments.filter((doc) => doc.userId === userId || isAdmin));
         setDocumentTypes(allDocumentTypes);
         setCategories(allCategories);
         setTypeDossiers(allTypeDossiers);
       } catch (err) {
-        console.error("❌ Erreur chargement données citoyen :", err);
+        console.error(" Erreur chargement données citoyen :", err);
       } finally {
         setLoading(false);
       }
@@ -132,17 +131,17 @@ const CitizenPage = () => {
     if (keycloak.authenticated) fetchData();
   }, [userId, isAdmin]);
 
-  // === Catégorie ===
+
   const handleSelectCategory = async (id) => {
     try {
       const cat = await getCategoryById(id);
       setSelectedCategory(cat);
     } catch (err) {
-      console.error("❌ Erreur chargement catégorie :", err);
+      console.error(" Erreur chargement catégorie :", err);
     }
   };
 
-  // === Dossier ===
+
   const handleAddDossier = async () => {
     if (!newDossier.typeDossierId) {
       return alert("Veuillez sélectionner un type de dossier.");
@@ -157,7 +156,7 @@ const CitizenPage = () => {
       setDossiers((prev) => [...prev, dossier]);
       setNewDossier({ typeDossierId: "", status: "En cours", isCompleted: false });
     } catch (err) {
-      console.error("❌ Erreur ajout dossier :", err);
+      console.error(" Erreur ajout dossier :", err);
       alert("Impossible d'ajouter le dossier.");
     }
   };
@@ -169,11 +168,11 @@ const CitizenPage = () => {
       setDossiers((prev) => prev.filter((d) => d.id !== id));
       setDocuments((prev) => prev.filter((doc) => doc.dossierAdministratifId !== id));
     } catch (err) {
-      console.error("❌ Erreur suppression dossier :", err);
+      console.error(" Erreur suppression dossier :", err);
     }
   };
 
-  // === Document ===
+
   const handleAddDocument = async () => {
     if (!newDocument.type || !newDocument.dossierAdministratifId)
       return alert("Veuillez sélectionner un type et un dossier.");
@@ -195,7 +194,7 @@ const CitizenPage = () => {
         importLocation: "",
       });
     } catch (err) {
-      console.error("❌ Erreur ajout document :", err);
+      console.error(" Erreur ajout document :", err);
     }
   };
 
@@ -213,7 +212,7 @@ const CitizenPage = () => {
       setDocuments((prev) => prev.map((d) => (d.id === editDocument.id ? updated : d)));
       setEditDocument(null);
     } catch (err) {
-      console.error("❌ Erreur mise à jour document :", err);
+      console.error(" Erreur mise à jour document :", err);
     }
   };
 
@@ -223,11 +222,11 @@ const CitizenPage = () => {
       await deleteDocument(id);
       setDocuments((prev) => prev.filter((d) => d.id !== id));
     } catch (err) {
-      console.error("❌ Erreur suppression document :", err);
+      console.error("Erreur suppression document :", err);
     }
   };
 
-  // === Rendezvous ===
+
   const handleAddRendezvous = async () => {
     if (!appointmentDate || !typeDossierId) {
       return alert("Veuillez choisir un type de dossier et une date.");
@@ -239,10 +238,10 @@ const CitizenPage = () => {
       });
       setRendezvous(rdv);
       setRendezvousId(rdv.id);
-      setRdvMessage("✅ Rendez-vous créé avec succès !");
+      setRdvMessage(" Rendez-vous créé avec succès !");
     } catch (err) {
-      console.error("❌ Erreur ajout rendez-vous:", err);
-      setRdvMessage("❌ Impossible de créer le rendez-vous.");
+      console.error(" Erreur ajout rendez-vous:", err);
+      setRdvMessage(" Impossible de créer le rendez-vous.");
     }
   };
 
@@ -263,10 +262,10 @@ const CitizenPage = () => {
     try {
       const rdv = await getRendezvousById(rendezvousId);
       setRendezvous(rdv);
-      setRdvMessage("ℹ️ Rendez-vous récupéré.");
+      setRdvMessage(" Rendez-vous récupéré.");
     } catch (err) {
-      console.error("❌ Erreur get rendez-vous:", err);
-      setRdvMessage("❌ Impossible de récupérer le rendez-vous.");
+      console.error(" Erreur get rendez-vous:", err);
+      setRdvMessage(" Impossible de récupérer le rendez-vous.");
     }
   };
 
@@ -275,21 +274,21 @@ const CitizenPage = () => {
     try {
       await deleteRendezvous(rendezvousId);
       setRendezvous(null);
-      setRdvMessage("🗑️ Rendez-vous annulé.");
+      setRdvMessage(" Rendez-vous annulé.");
     } catch (err) {
-      console.error("❌ Erreur delete rendez-vous:", err);
-      setRdvMessage("❌ Impossible d'annuler le rendez-vous.");
+      console.error(" Erreur delete rendez-vous:", err);
+      setRdvMessage(" Impossible d'annuler le rendez-vous.");
     }
   };
 
-  // === Notifications ===
+
   useEffect(() => {
     const loadNotifications = async () => {
       try {
         const notifList = await getNotifications();
         setNotifications(notifList);
       } catch (err) {
-        console.error("❌ Erreur lors du chargement des notifications :", err);
+        console.error(" Erreur lors du chargement des notifications :", err);
       } finally {
         setLoading(false);
       }
@@ -304,12 +303,12 @@ const CitizenPage = () => {
         await deleteNotification(id);
         setNotifications((prev) => prev.filter((notif) => notif.id !== id));
       } catch (err) {
-        console.error("❌ Erreur lors de la suppression de la notification :", err);
+        console.error(" Erreur lors de la suppression de la notification :", err);
       }
     }
   };
 
-  // === Charger données citoyen ===
+
   useEffect(() => {
     const loadCitizenData = async () => {
       try {
@@ -321,7 +320,7 @@ const CitizenPage = () => {
         setDossiers(dossierList);
         setNotifications(notifList);
       } catch (err) {
-        console.error("❌ Erreur lors du chargement des données citoyen :", err);
+        console.error(" Erreur lors du chargement des données citoyen :", err);
       } finally {
         setLoading(false);
       }
@@ -355,7 +354,7 @@ const CitizenPage = () => {
   </div>
   <div className="citizen-dashboard">
 
-  {/* 🔹 Infos citoyen */}
+
   {citizenInfo && (
     <div className="citizen-info-card">
       <h2 className="citizen-info-title">
@@ -368,7 +367,7 @@ const CitizenPage = () => {
     </div>
   )}
 
-  {/* 🔹 Mes Dossiers */}
+
   <div className="dossier-card">
     <h2 className="dossier-title">
       <img src={mesDossiersIcon} alt="Mes Dossiers" className="folder-icon" />
@@ -397,12 +396,8 @@ const CitizenPage = () => {
 
 </div>
 
-
-
-  {/* === Conteneur global horizontal pour Catégories + Dossiers === */}
   <div className="sections-container-horizontal">
 
-    {/* === Catégories === */}
     <div className="categories-section card">
       <h3 className="categories-title">
         <img src={categoryIcon} alt="Catégories" className="icon-small" />
@@ -434,7 +429,7 @@ const CitizenPage = () => {
               .filter((dt) => dt.categoryId === selectedCategory.id)
               .map((dt) => (
                 <li key={dt.id} className="document-type">
-                  {dt.name} {dt.isImportable ? "📥 (Importable)" : ""}
+                  {dt.name} {dt.isImportable ? " (Importable)" : ""}
                 </li>
               ))}
           </ul>
@@ -442,7 +437,7 @@ const CitizenPage = () => {
       )}
     </div>
 
-    {/* === Dossiers === */}
+ 
     <div className="dossiers-section card">
       <h3 className="dossiers-title">
         <img src={folderIcon} alt="Dossiers" className="icon-small" />
@@ -498,7 +493,7 @@ const CitizenPage = () => {
         </tbody>
       </table>
 
-      {/* Formulaire ajout dossier */}
+
       <div className="ajout-dossier">
         <h4>
           <img src={dossierIcon} alt="Ajouter" className="icon-small" />
@@ -530,15 +525,15 @@ const CitizenPage = () => {
 
   </div>
 
-      {/* === Documents === */}
+
       <div className="documents-container">
-      {/* === Titre === */}
+
       <h3 className="documents-title">
   <img src={documentationIcon} alt="Documents" className="documentation-icon" />
   Mes documents
 </h3>
 
-      {/* === Tableau documents === */}
+     
       <table className="documents-table">
         <thead>
           <tr>
@@ -644,7 +639,6 @@ const CitizenPage = () => {
         </tbody>
       </table>
 
-      {/* === Formulaire ajout document === */}
       <div className="add-document-form">
   <h4 className="add-document-title">
     <img
@@ -712,7 +706,7 @@ const CitizenPage = () => {
         <button onClick={handleAddDocument}>Ajouter document</button>
       </div>
     </div>
-    {/* === Rendezvous === */}
+  
 {activeSection === "rendezvous" && (
   <div className="panel">
     <h3 style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -753,7 +747,6 @@ const CitizenPage = () => {
 
     {rdvMessage && <p>{rdvMessage}</p>}
 
-    {/* Rendez-vous sélectionné */}
     {rendezvous && (
       <div className="panel-item">
         <p><strong>ID:</strong> {rendezvous.id}</p>
@@ -773,7 +766,7 @@ const CitizenPage = () => {
       </div>
     )}
 
-    {/* Liste de tous les rendez-vous */}
+
     <div className="panel-item" style={{ marginTop: "20px" }}>
       <h4>Mes rendez-vous précédents</h4>
       <table border="1" cellPadding="5" style={{ width: "100%" }}>
@@ -808,7 +801,6 @@ const CitizenPage = () => {
   </div>
 )}
 
-     {/* 🔹 Notifications */}
 <div className="notification-card">
   <h2 className="notification-title">Mes Notifications</h2>
 
