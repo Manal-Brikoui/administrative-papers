@@ -21,7 +21,7 @@ const Navbar = () => {
     display: 'flex',
     alignItems: 'center',
     gap: '0.8rem',
-    color: '#000000', // SmartBerkane en noir
+    color: '#000000',
     fontSize: '1.8rem',
     fontWeight: 'bold',
     textDecoration: 'none'
